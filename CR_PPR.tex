@@ -1,0 +1,98 @@
+\documentclass[12pt,a4paper,french]{scrartcl} % option pr format européen (défaut US !)
+%scrartcl : scr- classe coma :permet trucs comme \addsec{title} (section ds table non numérotée). Voir poly faccanoni p27.
+\usepackage[utf8]{inputenc}     % codage des caracteres, surtout linux. (accents par ex)
+\usepackage[T1]{fontenc}        % codage, mais en sortie, des caracteres
+\usepackage{babel}              % Parle d'autres langues (espaces avec : ...). Ici fr passé a documentclass, sinon marche pas. Pk ?
+\usepackage{textcomp}           % caracteres vrmt speciaux. Penser a DETEXIFY : DESSINE ET TROUVE !
+\usepackage{mathtools,amssymb} %\usepackage{amsmath,amssymb} %maths, mathtools contient amsmath
+\usepackage{lmodern}            % police caracteres
+\usepackage{graphbox} %\usepackage{graphicx} % images, alignement
+\usepackage[dvipsnames,svgnames]{xcolor} % Couleurs++ (voir docu)
+\usepackage{lipsum}     %lorem ipsum, texte bouche trous
+\usepackage{microtype}          % A charger apres modifs de fonte Améliore le tout
+\usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,
+breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument 
+
+\usepackage{paralist}   % listes bien plus belles (préférences) voir enumitem sinon
+
+\usepackage{listings}   % insérer du code, standard.
+\lstset{ % a creuser, j'aime pas le design
+    upquote = true,
+    columns = flexible,
+    basicstyle = \ttfamily,
+    keepspaces=true,
+    language = python,
+    backgroundcolor = \color{Navy!10}, % 10% bleu
+    keywordstyle = \color{ForestGreen}\bfseries,
+    % numbers=left, numberstyle=\tiny,
+    tabsize = 4,
+}
+
+\title{Etude de différentes méthodes de mesure de distance stellaire}
+\author{Quentin Buet, Antoine Roueff} % a confirmer
+\date{} % a specifier
+% ajouter logos. formatage ?
+
+\begin{document} % max 15 pages
+\maketitle
+\begin{abstract}
+    \begin{center}
+        \textbf{Abstract}
+    \end{center}
+
+    \textit{Contexte. }La mission du satellite Gaia () % date/source
+    a permis d'enrichir grandement notre carte du ciel, 
+    et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais)
+
+    \textit{But. }Nous tentons de reconstituer cette échelle de distance stellaire 
+     afin d'en comprendre les mécanismes et difficultés. 
+     Nous utilisons des méthodes simples et tentons d'en déduire les erreurs correspondantes, 
+     ainsi que le poids de nos compromis.
+
+    \textit{Méthodes. }Nous nous basons sur la 
+    \href{https://www.cosmos.esa.int/web/gaia/dr2}{seconde publication de la mission du satellite Gaia (DR2)}, 
+    % ce lien ? ou direct archive ? Autre format comme ¹ ?
+    les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
+    L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}
+
+    \textit{Résultats. }\lipsum[3][1-3]
+
+    \textit{Conclusions. }\lipsum[4][1-3]
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+Mesurer la distance qui nous sépare d'un objet à l'extérieur du système solaire peut être % chapeau autrement ?
+déstabilisant: nous ne pouvons pas, comme nous en avons l'habitude, nous déplacer ou y envoyer un objet pour faire la mesure.
+En effet, cela mettrait des années au mieux, voire des millénaires. Lesdites distances sont collossales.
+
+C'est pourquoi les chercheurs conçoivent une nouvelle échelle, nommée (en anglais) \textbf{The Distance Ladder}.
+Pour construire cette échelle, il nous faut plusieurs outils car chacun a ses qualités et défauts, et a besoin de l'autre pour fonctionner:
+
+\begin{description} % j'aime pas le rendu. manque bulet points ?
+    \item[La Parallaxe] utilise l'angle d'observation de l'objet 
+        \footnote{Le terme général de tout élément stellaire observable est l'objet. Cela comprend par exemple une étoile, une planète, un trou noir \dots}
+        observé pour en déduire sa distance, par simple trigonométrie. La mesure se suffit à elle-même, mais elle se détèriore très vite avec la distance. 
+        Elle permet généralement de calibrer d'autres méthodes.% pas si sur...
+    \item[Les chandelles standard] sont des objets dont une propriété particulière 
+        comme la période de scintillement permet de déterminer sa luminosité réèle (magnitude),
+        et donc sa distance, la propagation de la lumière étant connue. 
+        Ce champ de recherche est récent et donc changeant mais 2 types de chandelles standard se distinguent: les céphéides et les supernovae 1a.
+    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'une étoile 
+        (chaque élément émet un rayonnement d'une longueur d'onde donnée et connue), 
+        décalage lié à la vitesse relative de l'objet par la loi de Doppler-Fizeau. 
+        Cette méthode, complexe, ne sera pas traitée ici.
+\end{description}
+
+\section{Parallaxe}
+\lipsum[6]
+
+\section{Chandelles standard}
+\subsection{Céphéides}
+\subsection{Supernovae 1a} % pas commencé
+
+\section{Conclusion}
+\lipsum[9]
+
+\end{document}

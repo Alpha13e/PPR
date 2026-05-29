@@ -1,3 +1,12 @@
+# Rendus
+## Doc
+Doit contenir au moins: Titre, logos, auteur, encadrant, table des matières avec introduction et conclusion, Bibliographie soignée.
+
+## Présentation
+Plus complexe
+
+---
+
 [Papier officiel de la mission Gaia](https://www.aanda.org/articles/aa/full_html/2018/08/aa32727-18/aa32727-18.html#S17)
 # Parallax
 [source dataset csv](https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars)
