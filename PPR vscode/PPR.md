@@ -3,7 +3,11 @@
 [source dataset csv](https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars)
 
 ## precision inquiries
-[on parallax precisions and possible errors](https://www.aanda.org/articles/aa/full_html/2021/06/aa40985-21/aa40985-21.html)
+[on parallax precisions and possible errors (10pc sample compilation)](https://www.aanda.org/articles/aa/full_html/2021/06/aa40985-21/aa40985-21.html)
+
+[on the true bayesian method and the shortcomings of other ones, ie incertitudes de la paralaxe](https://www.aanda.org/articles/aa/abs/2018/08/aa32964-18/aa32964-18.html)
+
+> l'approche bayésienne est probabiliste.
 
 On devrait etre + precis sur prblms pr ca, car tt le reste se calibre a parallax
 
@@ -15,9 +19,17 @@ Vérifier avec roueff
 On a une formule de type $d=\frac{cte}\varpi$. Ainsi on peut propager l'erreur avec :
 
 $$
-\frac{\sigma_\varpi}{d}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
+\frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
 \sigma_d=d\left|\frac{\sigma_\varpi}{\varpi}\right|
 $$
+
+vient de 
+
+$$
+dw=cte \Leftrightarrow \partial (dw)=0 \Leftrightarrow d\partial w=|-w\partial d|
+$$
+
+un ecart type (sigmea est +) (racine d'un carré). remplace $\partial$ par $\sigma$
 
 ## Formula and units for python
 old notes, to format
@@ -31,7 +43,7 @@ old notes, to format
 $pc\Rightarrow$ parsec ; $au\Rightarrow$ astronomical unit *(distance earth-sun)*
 
 $$
-1 pc := \frac{648\ 000}{\pi} au
+1 pc := \frac{648\ 000}{\pi} au 
 $$
 
 # Candle
@@ -45,6 +57,7 @@ $$
 1. dét lien entre **période** et luminosité totale par parallaxe
 2. utiliser lien pr distance lointaine.
 
+voir 2 pdfs, général et pr gaia
 ## Supernovae 1a
 > encore autre chose ?
 
