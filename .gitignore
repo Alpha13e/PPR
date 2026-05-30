@@ -10,3 +10,5 @@ gaia-dr2-allwise-2mass-ppmxl.csv
 *.out
 *.synctex.gz
 *.toc
+*.bbl
+*.blg
