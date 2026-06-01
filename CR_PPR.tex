@@ -1,19 +1,29 @@
-\documentclass[12pt,a4paper,french]{scrartcl} % option pr format européen (défaut US !)
-%scrartcl : scr- classe coma :permet trucs comme \addsec{title} (section ds table non numérotée). Voir poly faccanoni p27.
-\usepackage[utf8]{inputenc}     % codage des caracteres, surtout linux. (accents par ex)
-\usepackage[T1]{fontenc}        % codage, mais en sortie, des caracteres
-\usepackage{babel}              % Parle d'autres langues (espaces avec : ...). Ici fr passé a documentclass, sinon marche pas. Pk ?
-\usepackage{textcomp}           % caracteres vrmt speciaux. Penser a DETEXIFY : DESSINE ET TROUVE !
-\usepackage{mathtools,amssymb} %\usepackage{amsmath,amssymb} %maths, mathtools contient amsmath
-\usepackage{lmodern}            % police caracteres
-\usepackage{graphbox} %\usepackage{graphicx} % images, alignement
-\usepackage[dvipsnames,svgnames]{xcolor} % Couleurs++ (voir docu)
-\usepackage{lipsum}     %lorem ipsum, texte bouche trous
-\usepackage{microtype}          % A charger apres modifs de fonte Améliore le tout
-\usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,
-breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument 
+\documentclass[12pt,a4paper,french]{scrartcl} 
 
-\usepackage{paralist}   % listes bien plus belles (préférences) voir enumitem sinon
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{babel}        % Parle d'autres langues (espaces avec : ...). Ici fr passé a documentclass, sinon marche pas: Norme récente !
+\usepackage{textcomp}
+\usepackage{mathtools,amssymb}
+\usepackage{lmodern}
+\usepackage{graphbox}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage{lipsum}       %lorem ipsum, texte bouche trous, a retirer
+
+\usepackage{lastpage} % spécifique, pr derniere page
+\usepackage[headsepline=0.4pt]{scrlayer-scrpage} % pr en-tete et pied-de page, optimisé scratcl (koma-type)
+\clearpairofpagestyles % clear défaut
+
+\rohead{\includegraphics[height=13.5pt]{utln.png}} % taille fonction de la place dispo. Pr augmenter ajouter \usepackage[headheight=25pt]{geometry}
+\lohead{\rightmark} % trouver l'affichage de la section en cours
+
+\cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
+
+\usepackage{microtype} % après des trucs pr harmoniser. only fonts ?
+\usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,
+breaklinks=true,pdfstartview=XYZ}
+
+\usepackage{enumitem}   % listes bien plus belles (préférences) voir enumitem sinon
 
 \usepackage{listings}   % insérer du code, standard.
 \lstset{ % a creuser, j'aime pas le design
@@ -27,14 +37,21 @@ breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument
     % numbers=left, numberstyle=\tiny,
     tabsize = 4,
 }
-
+\titlehead{
+    \centering
+    \includegraphics[height=2cm]{utln.png}
+    \hspace{2cm} % Espace entre les deux logos
+    \includegraphics[height=2cm]{im2np.jpg}
+}
 \title{Etude de différentes méthodes de mesure de distance stellaire}
 \author{Quentin Buet, Antoine Roueff} % a confirmer
 \date{} % a specifier
 % ajouter logos. formatage ?
 
 \begin{document} % max 15 pages
+\vfill % chaque \vfill a le meme espace. Evite de tout redéfinir avec l'enviro titlepage.
 \maketitle
+\vfill
 \begin{abstract}
     \begin{center}
         \textbf{Abstract}
@@ -49,9 +66,7 @@ breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument
      Nous utilisons des méthodes simples et tentons d'en déduire les erreurs correspondantes, 
      ainsi que le poids de nos compromis.
 
-    \textit{Méthodes. }Nous nous basons sur la 
-    \href{https://www.cosmos.esa.int/web/gaia/dr2}{seconde publication de la mission du satellite Gaia (DR2)}, 
-    % ce lien ? ou direct archive ? Autre format comme ¹ ?
+    \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia \cite{DR2}, 
     les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
     L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}
 
@@ -59,6 +74,8 @@ breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument
 
     \textit{Conclusions. }\lipsum[4][1-3]
 \end{abstract}
+\vfill
+\pagebreak
 
 \tableofcontents
 
@@ -67,6 +84,8 @@ breaklinks=true,pdfstartview=XYZ} % Hyperliens interdocument
 
 Bien que nous n'ayons pas utilisé son contenu, le papier suivant
 \cite{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
+
+\newpage 
 
 \section{Introduction}
 Mesurer la distance qui nous sépare d'un objet à l'extérieur du système solaire peut être % chapeau autrement ?
