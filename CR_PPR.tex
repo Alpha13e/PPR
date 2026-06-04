@@ -1,10 +1,12 @@
 \documentclass[12pt,a4paper,french]{scrartcl} 
 
+\usepackage{natbib} % pr de meilleurs \cite : \citep et \citet (parantheses & texte). Avant babel car francais
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{babel}        % Parle d'autres langues (espaces avec : ...). Ici fr passé a documentclass, sinon marche pas: Norme récente !
 \usepackage{textcomp}
 \usepackage{mathtools,amssymb}
+\usepackage{gensymb} % for \degree
 \usepackage{lmodern}
 \usepackage{graphbox}
 \usepackage[dvipsnames,svgnames]{xcolor}
@@ -20,10 +22,15 @@
 \cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
 
 \usepackage{microtype} % après des trucs pr harmoniser. only fonts ?
-\usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,
-breaklinks=true,pdfstartview=XYZ}
+
+\usepackage{hyperref} \hypersetup{colorlinks=true,linkcolor=Brown,urlcolor=Navy,breaklinks=true,pdfstartview=XYZ}
+\usepackage[french, nameinlink, capitalize]{cleveref}
+\crefname{figure}{Fig.}{Figs.}% On force l'abréviation pour les figures
+\crefname{equation}{\'Eq.}{\'Eqs.}% pour les équations
 
 \usepackage{enumitem}   % listes bien plus belles (préférences) voir enumitem sinon
+
+\usepackage{tikz}
 
 \usepackage{listings}   % insérer du code, standard.
 \lstset{ % a creuser, j'aime pas le design
@@ -66,7 +73,7 @@ breaklinks=true,pdfstartview=XYZ}
      Nous utilisons des méthodes simples et tentons d'en déduire les erreurs correspondantes, 
      ainsi que le poids de nos compromis.
 
-    \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia \cite{DR2}, 
+    \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia \citep{DR2}, 
     les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
     L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}
 
@@ -82,8 +89,7 @@ breaklinks=true,pdfstartview=XYZ}
 \section*{Remerciements}
 % todo, faire ici ?
 
-Bien que nous n'ayons pas utilisé son contenu, le papier suivant
-\cite{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
+Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
 
 \newpage 
 
@@ -111,7 +117,59 @@ Pour construire cette échelle, il nous faut plusieurs outils car chacun a ses q
 \end{description}
 
 \section{Parallaxe}
-\lipsum[6]
+\subsection{Principe}
+
+Le principe de la parallaxe est simple: Nous tournons autour du Soleil en une période connue, à une distance connue. 
+Selon un repère héliocentrique, l'objet mesuré est fixe. Comme décrit \cref{fig.parallax}, on mesure l'angle entre l'étoile et la tangente à l'orbite, 
+et connaissant le rayon de cette orbite, on en détermine, par simple trigonométrie, la distance qui nous sépare de l'objet.
+
+\begin{figure}[htbp]
+    \centering % généré par ia
+    \begin{tikzpicture}
+        
+        % Orbite de la Terre (vue de dessus, donc parfaitement circulaire)
+        \draw[dashed, color=gray] (0,0) circle (2cm);
+        
+        % Les côtés du triangle rectangle
+        \draw[thick] (0,0) -- (-6,0) node[midway, below] {$d$}; % Axe Soleil-Étoile
+        \draw[thick] (0,0) -- (0,2) node[midway, right] {$r$}; % Axe Soleil-Terre
+        \draw[thick] (-6,0) -- (0,2); % Ligne de visée Terre-Étoile
+        
+        % Symbole de l'angle droit au niveau du Soleil
+        \draw (-0.3,0) -- (-0.3,0.3) -- (0,0.3);
+        
+        % Angle de parallaxe (au niveau de l'étoile)
+        % L'étoile est en (-6,0). Le rayon fait 1.5cm. L'angle d'élévation est d'environ 18.4 degrés.
+        \draw (-4.5,0) arc[start angle=0, end angle=18.4, radius=1.5cm] node[midway, right=4pt, yshift=2pt] {$\varpi$};
+        
+        % Placement des astres
+        \fill[orange] (0,0) circle (4pt) node[below right, text=black] {Soleil};
+        \fill[blue] (0,2) circle (2pt) node[above right, text=black] {Terre};
+        \fill[black] (-6,0) circle (2pt) node[above left] {Objet};
+        
+    \end{tikzpicture}
+    \caption{Schéma de principe de la parallaxe (vue de dessus).}
+    \label{fig.parallax}
+\end{figure}
+
+L'unité de mesure de la parralaxe notée $\varpi$ est la miliseconde d'arc ($mas$), soit un millième d'une seconde d'arc, elle même 
+$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\cdot 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
+Cette unité, très petite, justifie à elle seule l'utilisation de l'approximation des angles petits, \cref{eq.parallax}.
+
+\begin{equation}\label{eq.parallax}
+    \tan(\varpi)=\frac{r}{d}\approx \varpi 
+    \Longleftrightarrow d=\frac{r}{\varpi}
+\end{equation}
+
+\subsection{Application}
+
+Aujourd'hui, la meilleure source de données pour la parallaxe provient du satellite Gaia. 
+Pour des raisons pratiques nous nous baserons sur la seconde publication de données \citep{DR2}, 
+et sur l'échantillon trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}.
+
+Ce satellite est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
+$r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil.
+
 
 \section{Chandelles standard}
 \subsection{Céphéides}
@@ -122,7 +180,7 @@ Pour construire cette échelle, il nous faut plusieurs outils car chacun a ses q
 
 % biblio. A annoncer ?
 
-\bibliographystyle{plain}
+\bibliographystyle{apalike} % meilleurs styles ?
 \bibliography{CR_PPR}
 
 \end{document}
