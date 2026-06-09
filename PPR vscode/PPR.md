@@ -40,6 +40,8 @@ $$
 
 un ecart type (sigmea est +) (racine d'un carré). remplace $\partial$ par $\sigma$
 
+On peut aussi passer par le ln()
+
 ## Formula and units for python
 old notes, to format
 

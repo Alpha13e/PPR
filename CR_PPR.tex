@@ -17,7 +17,7 @@
 \clearpairofpagestyles % clear défaut
 
 \rohead{\includegraphics[height=13.5pt]{utln.png}} % taille fonction de la place dispo. Pr augmenter ajouter \usepackage[headheight=25pt]{geometry}
-\lohead{\rightmark} % trouver l'affichage de la section en cours, ne marche pas...
+\lohead{\leftmark} % trouver l'affichage de la section en cours, left pr section, right pr subsection. Non.
 
 \cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
 
@@ -182,7 +182,7 @@ Pour des raisons pratiques nous nous baserons sur la seconde publication de donn
 et sur l'échantillon trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}.
 
 Ce satellite est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
-$r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil. Comme annoncé \citep{DR2} section 3.1, % a intégrer ?
+$r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil. Comme annoncé par \citet{DR2} section 3.1, % a intégrer ?
 les données sont calibrées pour être lissées. Ainsi la parallaxe est déjà ramenée pour un calcul avec $r=1$ ua.
 Par définition \citep{parsec-def}, le résultat est en parsec si $\varpi$ est en arcsecondes.
 
@@ -197,45 +197,50 @@ On en déduit l'erreur sur la distance $\sigma_d$:
 car % formulation a modif ?
 
 \[
-dw=cte \Leftrightarrow \partial (dw)=0 \Leftrightarrow d\partial w=|-w\partial d|
+d\cdot w=cte \Leftrightarrow \partial (dw)=0 \Leftrightarrow d\partial w=|-w\partial d|
 \]
 
 On peut alors automatiser ce calcul à l'aide d'un simple code Python, facilement adaptable:
 
 % impossible de mettre des caractères spéciaux, tant pis.
 \begin{lstlisting}
+#%% Parallax
 # Traitements preliminaires
-f=open("/home/alpha/Documents/PPR/PPR vscode/gaia-dr2-allwise-2mass-ppmxl.csv",'r')
-g=open("/home/alpha/Documents/PPR/PPR vscode/parallax_results.txt",'w')
+input=open("/home/alpha/Documents/PPR/PPR vscode/gaia-dr2-allwise-2mass-ppmxl.csv",'r')
+output=open("/home/alpha/Documents/PPR/PPR vscode/parallax_results.txt",'w')
 
-title=f.readline()
+title=input.readline()
 title=title.strip('\n')
 titles=title.split(',')
 
-g.write(titles[0]+"\t"
-        +titles[1]+"(mas)\t"
-        +titles[2]
-        +"\tdistance(pc)\n")
+output.write("source_id\tparallax (mas)\tparallax_error(mas)\tdistance(pc)\tdistance_error (pc)\n")
 
 # Automatisation
+i=0 # compte les echecs
+n=100 # nombre de lignes a lire, arbitraire
 
-for i in range(100):
-    l=f.readline()
-    id,par,err,*_=l.split(',')
+for _ in range(n):
+    l=input.readline()
+    id,par,perr,*_=l.split(',')
 
     par=float(par)+0.029 # erreur zero-point (-biais, biais=-0.029)
-    dist=1/(par*1e-3)
-    err=dist*abs(float(err)/par) # propagation de l'erreur
+    f=abs(float(perr)/par) # calcul de la qualite
+    dist=1/(par*1e-3) 
 
-    g.write(id+"\t"+str(par)+"\t"+str(err)+"\t"+str(dist)+"\n")
+    if f<0.2 and dist>0:
+        derr=dist*f # propagation de l'erreur
+        output.write(f"{id}\t{par}\t{perr}\t{dist}\t{derr}\n")
+    else:
+        i+=1
 
-g.close()
-f.close()
-print("Done")
-\end{lstlisting}
+output.close()
+input.close()
+print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
+\end{lstlisting} % note: in biblio, if \aap or \mnras \apj, raccourcis internes aux journeaux scientifiques: scractl connait pas.
 
-Cependant, on remarque un problème: l'erreur est parfois supérieure à la distance. 
-Par exemple, la première ligne propose une parallaxe de $2.3\,mas$ et une erreur de $5.4$.
+La section 3.2 de \citet{DR2-parallax} cautionne cette approche si la parallaxe est positive, 
+donc logique, et si le ratio $f=\frac{\sigma_\varpi}{\varpi}$ est petit. \citet{parallax-stats} nous informe que cette limite est $20\%$.
+% origine: a mettre ? Lorsque l'erreur relative $f$ augmente, la distribution de probabilité de la distance calculée se déforme, s'étire vers l'infini et déplace la valeur la plus probable loin de la valeur réelle. AI.
 
 \section{Chandelles standard}
 \lipsum[4]
