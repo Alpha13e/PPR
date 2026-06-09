@@ -1,5 +1,5 @@
 \documentclass[12pt,a4paper,french]{scrartcl} 
-
+% rappel: https://www.lyx.org/ pr gui a sortie latex !
 \usepackage{natbib} % pr de meilleurs \cite : \citep et \citet (parantheses & texte). Avant babel car francais
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -17,7 +17,7 @@
 \clearpairofpagestyles % clear défaut
 
 \rohead{\includegraphics[height=13.5pt]{utln.png}} % taille fonction de la place dispo. Pr augmenter ajouter \usepackage[headheight=25pt]{geometry}
-\lohead{\rightmark} % trouver l'affichage de la section en cours
+\lohead{\rightmark} % trouver l'affichage de la section en cours, ne marche pas...
 
 \cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
 
@@ -32,18 +32,32 @@
 
 \usepackage{tikz}
 
-\usepackage{listings}   % insérer du code, standard.
-\lstset{ % a creuser, j'aime pas le design
-    upquote = true,
-    columns = flexible,
-    basicstyle = \ttfamily,
-    keepspaces=true,
-    language = python,
-    backgroundcolor = \color{Navy!10}, % 10% bleu
-    keywordstyle = \color{ForestGreen}\bfseries,
-    % numbers=left, numberstyle=\tiny,
-    tabsize = 4,
+\usepackage{listings}   % insérer du code, standard. Voir minted, peut etre dangereux
+
+% base IA personnalisée
+\definecolor{fondCode}{RGB}{248, 248, 248}
+\definecolor{vertCommentaire}{RGB}{0, 128, 0}
+\definecolor{mauveChaine}{RGB}{163, 21, 21}
+
+\lstset{
+    language=python,
+    backgroundcolor=\color{fondCode},      % Couleur de fond très claire
+    basicstyle=\ttfamily,            % Police machine à écrire, taille réduite
+    keywordstyle=\color{blue}, % Mots-clés en bleu et gras (def, for, in...)
+    commentstyle=\color{vertCommentaire}, % Commentaires en vert et italique
+    stringstyle=\color{mauveChaine},       % Texte entre guillemets en rouge/mauve
+    numbers=left,
+    numberstyle=\small\color{darkgray},         % ou tiny ?
+    numbersep=10pt,                        % Écart entre les numéros et le code
+    frame=single,                          % Ajoute un cadre fin autour du code
+    rulecolor=\color{lightgray},           % Couleur du cadre
+    tabsize=4,                             % Taille des tabulations
+    breaklines=true,                       % Retour à la ligne automatique si trop long
+    breakatwhitespace=true,                % Coupe de préférence aux espaces
+    upquote=true,                          % Vrais guillemets droits (nécessite textcomp)
+    keepspaces=true                        % Respecte l'indentation Python
 }
+
 \titlehead{
     \centering
     \includegraphics[height=2cm]{utln.png}
@@ -53,7 +67,6 @@
 \title{Etude de différentes méthodes de mesure de distance stellaire}
 \author{Quentin Buet, Antoine Roueff} % a confirmer
 \date{} % a specifier
-% ajouter logos. formatage ?
 
 \begin{document} % max 15 pages
 \vfill % chaque \vfill a le meme espace. Evite de tout redéfinir avec l'enviro titlepage.
@@ -161,6 +174,7 @@ Cette unité, très petite, justifie à elle seule l'utilisation de l'approximat
     \Longleftrightarrow d=\frac{r}{\varpi}
 \end{equation}
 
+
 \subsection{Application}
 
 Aujourd'hui, la meilleure source de données pour la parallaxe provient du satellite Gaia. 
@@ -168,15 +182,78 @@ Pour des raisons pratiques nous nous baserons sur la seconde publication de donn
 et sur l'échantillon trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}.
 
 Ce satellite est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
-$r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil.
+$r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil. Comme annoncé \citep{DR2} section 3.1, % a intégrer ?
+les données sont calibrées pour être lissées. Ainsi la parallaxe est déjà ramenée pour un calcul avec $r=1$ ua.
+Par définition \citep{parsec-def}, le résultat est en parsec si $\varpi$ est en arcsecondes.
 
+Il ne nous manque plus que la gestion de l'erreur. L'erreur sur la mesure $\sigma_\varpi$ nous est donnée, et le calcul est de type $d=\frac{cte}\varpi$. 
+On en déduit l'erreur sur la distance $\sigma_d$:
+
+\begin{equation}\label{eq.parallax-error}
+    \frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
+    \sigma_d=d\left|\frac{\sigma_\varpi}{\varpi}\right|
+\end{equation}
+
+car % formulation a modif ?
+
+\[
+dw=cte \Leftrightarrow \partial (dw)=0 \Leftrightarrow d\partial w=|-w\partial d|
+\]
+
+On peut alors automatiser ce calcul à l'aide d'un simple code Python, facilement adaptable:
+
+% impossible de mettre des caractères spéciaux, tant pis.
+\begin{lstlisting}
+# Traitements preliminaires
+f=open("/home/alpha/Documents/PPR/PPR vscode/gaia-dr2-allwise-2mass-ppmxl.csv",'r')
+g=open("/home/alpha/Documents/PPR/PPR vscode/parallax_results.txt",'w')
+
+title=f.readline()
+title=title.strip('\n')
+titles=title.split(',')
+
+g.write(titles[0]+"\t"
+        +titles[1]+"(mas)\t"
+        +titles[2]
+        +"\tdistance(pc)\n")
+
+# Automatisation
+
+for i in range(100):
+    l=f.readline()
+    id,par,err,*_=l.split(',')
+
+    par=float(par)+0.029 # erreur zero-point (-biais, biais=-0.029)
+    dist=1/(par*1e-3)
+    err=dist*abs(float(err)/par) # propagation de l'erreur
+
+    g.write(id+"\t"+str(par)+"\t"+str(err)+"\t"+str(dist)+"\n")
+
+g.close()
+f.close()
+print("Done")
+\end{lstlisting}
+
+Cependant, on remarque un problème: l'erreur est parfois supérieure à la distance. 
+Par exemple, la première ligne propose une parallaxe de $2.3\,mas$ et une erreur de $5.4$.
 
 \section{Chandelles standard}
+\lipsum[4]
 \subsection{Céphéides}
+\lipsum[5]
 \subsection{Supernovae 1a} % pas commencé
-
+\lipsum[6]
 \section{Conclusion}
 \lipsum[9]
+
+% mandatory acknowledgement, copié-collé:
+
+This work has made use of data from the European Space Agency (ESA) mission
+{\itshape Gaia} (\url{https://www.cosmos.esa.int/gaia}), processed by the {\itshape Gaia}
+Data Processing and Analysis Consortium (DPAC,
+\url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}). Funding for the DPAC
+has been provided by national institutions, in particular the institutions
+participating in the {\itshape Gaia} Multilateral Agreement.
 
 % biblio. A annoncer ?
 
