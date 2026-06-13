@@ -75,16 +75,14 @@
 \begin{abstract}
     \begin{center}
         \textbf{Abstract}
-    \end{center}
+    \end{center} % est-ce nécessaire ?
 
-    \textit{Contexte. }La mission du satellite Gaia () % date/source
+    \textit{Contexte. }La mission du satellite Gaia % date/source
     a permis d'enrichir grandement notre carte du ciel, 
     et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais)
 
     \textit{But. }Nous tentons de reconstituer cette échelle de distance stellaire 
      afin d'en comprendre les mécanismes et difficultés. 
-     Nous utilisons des méthodes simples et tentons d'en déduire les erreurs correspondantes, 
-     ainsi que le poids de nos compromis.
 
     \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia \citep{DR2}, 
     les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
@@ -107,34 +105,33 @@ Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très ut
 \newpage 
 
 \section{Introduction}
-Mesurer la distance qui nous sépare d'un objet à l'extérieur du système solaire peut être % chapeau autrement ?
-déstabilisant: nous ne pouvons pas, comme nous en avons l'habitude, nous déplacer ou y envoyer un objet pour faire la mesure.
-En effet, cela mettrait des années au mieux, voire des millénaires. Lesdites distances sont collossales.
+Mesurer la distance qui nous sépare d'un objet à l'extérieur du système solaire peut être 
+déstabilisant: il n'est pas possible, comme nous en avons l'habitude, de nous déplacer ou d'y envoyer un objet pour faire la mesure.
+En effet, cela mettrait des millénaires, ces distances sont collossales.
 
-C'est pourquoi les chercheurs conçoivent une nouvelle échelle, nommée (en anglais) \textbf{The Distance Ladder}.
-Pour construire cette échelle, il nous faut plusieurs outils car chacun a ses qualités et défauts, et a besoin de l'autre pour fonctionner:
+C'est pourquoi les chercheurs conçoivent de nouvelles méthodes de mesure, nommées (en anglais) \textbf{The Distance Ladder}.
+Pour construire cette échelle, il faut plusieurs outils car chacun a ses qualités et défauts, et a besoin de l'autre pour fonctionner:
 
 \begin{description} % j'aime pas le rendu. manque bulet points ?
-    \item[La Parallaxe] utilise l'angle d'observation de l'objet 
-        \footnote{Le terme général de tout élément stellaire observable est l'objet. Cela comprend par exemple une étoile, une planète, un trou noir \dots}
-        observé pour en déduire sa distance, par simple trigonométrie. La mesure se suffit à elle-même, mais elle se détèriore très vite avec la distance. 
-        Elle permet généralement de calibrer d'autres méthodes.% pas si sur...
-    \item[Les chandelles standard] sont des objets dont une propriété particulière 
-        comme la période de scintillement permet de déterminer sa luminosité réèle (magnitude),
-        et donc sa distance, la propagation de la lumière étant connue. 
-        Ce champ de recherche est récent et donc changeant mais 2 types de chandelles standard se distinguent: les céphéides et les supernovae 1a.
-    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'une étoile 
-        (chaque élément émet un rayonnement d'une longueur d'onde donnée et connue), 
-        décalage lié à la vitesse relative de l'objet par la loi de Doppler-Fizeau. 
-        Cette méthode, complexe, ne sera pas traitée ici.
+    \item[La Parallaxe] est fondée sur l'angle d'observation de l'objet stellaire (terme générique) % mieux ? quand même une parenthèse
+        pour en déduire sa distance par trigonométrie. Cette méthode ne nécessite pas de calibration, mais n'est efficace que pour de courtes distances: 
+        nous ne pouvons pas mesurer plus loin que la voie lactée.
+        %Elle permet généralement de calibrer d'autres méthodes.% pas si sur...
+    \item[Les chandelles standard] sont des objets dont une propriété particulière permet de déterminer sa luminosité réelle (sa magnitude),
+        et donc sa distance, la loi de propagation de la lumière étant connue. 
+        Ce champ de recherche est très dynamique mais 2 types de chandelles standard se distinguent: les céphéides et les supernovae 1a.
+    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
+        Cette méthode ne sera pas traitée ici. % c'est tout ?
 \end{description}
 
 \section{Parallaxe}
 \subsection{Principe}
 
-Le principe de la parallaxe est simple: Nous tournons autour du Soleil en une période connue, à une distance connue. 
-Selon un repère héliocentrique, l'objet mesuré est fixe. Comme décrit \cref{fig.parallax}, on mesure l'angle entre l'étoile et la tangente à l'orbite, 
-et connaissant le rayon de cette orbite, on en détermine, par simple trigonométrie, la distance qui nous sépare de l'objet.
+Le principe de la parallaxe est simple: nous tournons autour du Soleil en une période connue, à une distance connue. 
+Selon un repère héliocentrique, et dans les périodes de mesure, l'objet est considéré fixe. % source ?
+Comme décrit \cref{fig.parallax}, on mesure l'angle $\varpi$ entre l'objet et la tangente à l'orbite, 
+et connaissant le rayon de cette orbite, on en détermine par trigonométrie la distance qui nous sépare de l'objet.
+Bien entendu, des complications arrivent bien vite. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
 
 \begin{figure}[htbp]
     \centering % généré par ia
@@ -144,16 +141,20 @@ et connaissant le rayon de cette orbite, on en détermine, par simple trigonomé
         \draw[dashed, color=gray] (0,0) circle (2cm);
         
         % Les côtés du triangle rectangle
-        \draw[thick] (0,0) -- (-6,0) node[midway, below] {$d$}; % Axe Soleil-Étoile
-        \draw[thick] (0,0) -- (0,2) node[midway, right] {$r$}; % Axe Soleil-Terre
+        \draw[thick] (0,0) -- (-6,0) node[midway, below] {$d\,(pc)$}; % Axe Soleil-Étoile
+        \draw[thick] (0,0) -- (0,2) node[midway, right] {$r\,$(ua)}; % Axe Soleil-Terre
         \draw[thick] (-6,0) -- (0,2); % Ligne de visée Terre-Étoile
+
+        % second angle (Terre)
+        \draw[dashed, color=gray] (-2.5,2) -- (0,2);
+        \draw (-1.5,2) arc[start angle=0, end angle=18,radius=-1.5cm] node[midway, left=3.5pt,yshift=-3pt] {$\varpi\,(mas)$};
         
         % Symbole de l'angle droit au niveau du Soleil
         \draw (-0.3,0) -- (-0.3,0.3) -- (0,0.3);
         
         % Angle de parallaxe (au niveau de l'étoile)
         % L'étoile est en (-6,0). Le rayon fait 1.5cm. L'angle d'élévation est d'environ 18.4 degrés.
-        \draw (-4.5,0) arc[start angle=0, end angle=18.4, radius=1.5cm] node[midway, right=4pt, yshift=2pt] {$\varpi$};
+        \draw (-4.5,0) arc[start angle=0, end angle=18.4, radius=1.5cm] node[midway, right=4pt, yshift=2pt] {$\varpi\,(mas)$};
         
         % Placement des astres
         \fill[orange] (0,0) circle (4pt) node[below right, text=black] {Soleil};
@@ -161,53 +162,54 @@ et connaissant le rayon de cette orbite, on en détermine, par simple trigonomé
         \fill[black] (-6,0) circle (2pt) node[above left] {Objet};
         
     \end{tikzpicture}
-    \caption{Schéma de principe de la parallaxe (vue de dessus).}
+    \caption{Schéma de principe de la parallaxe (pas à l'échelle).}
     \label{fig.parallax}
 \end{figure}
 
-L'unité de mesure de la parralaxe notée $\varpi$ est la miliseconde d'arc ($mas$), soit un millième d'une seconde d'arc, elle même 
-$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\cdot 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
-Cette unité, très petite, justifie à elle seule l'utilisation de l'approximation des angles petits, \cref{eq.parallax}.
+L'unité de mesure de la parallaxe notée $\varpi$ est la miliseconde d'arc ($mas$), soit un millième d'une seconde d'arc, elle même 
+$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\, 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
+Cette unité, très petite, justifie à elle seule l'utilisation de l'approximation des angles petits, \cref{eq.parallax}. 
+On rappelle qu'un angle de un degré approximé ainsi est déjà négligeable.
 
 \begin{equation}\label{eq.parallax}
     \tan(\varpi)=\frac{r}{d}\approx \varpi 
-    \Longleftrightarrow d=\frac{r}{\varpi}
+    \Longleftrightarrow \boxed{d=\frac{r}{\varpi}}
 \end{equation}
 
 
 \subsection{Application}
 
 Aujourd'hui, la meilleure source de données pour la parallaxe provient du satellite Gaia. 
-Pour des raisons pratiques nous nous baserons sur la seconde publication de données \citep{DR2}, 
-et sur l'échantillon trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}.
+Pour des raisons pratiques nous nous baserons sur la seconde publication de données \citep{DR2}, et sur l'échantillon 
+trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}. % a remplacer par les vraies data. x trouvable.
 
-Ce satellite est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
+Il est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
 $r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil. Comme annoncé par \citet{DR2} section 3.1, % a intégrer ?
-les données sont calibrées pour être lissées. Ainsi la parallaxe est déjà ramenée pour un calcul avec $r=1$ ua.
-Par définition \citep{parsec-def}, le résultat est en parsec si $\varpi$ est en arcsecondes.
+les données sont prétraitées: la parallaxe est ramenée pour un calcul avec $r=1$ ua.
+Par convention \citep{parsec-def}, le résultat est en parsec si $\varpi$ est en arcsecondes.
 
-Il ne nous manque plus que la gestion de l'erreur. L'erreur sur la mesure $\sigma_\varpi$ nous est donnée, et le calcul est de type $d=\frac{cte}\varpi$. 
-On en déduit l'erreur sur la distance $\sigma_d$:
+Pour la gestion de l'erreur, estimons l'incertitude sur la distance $\sigma_d$. 
+L'incertitude sur la mesure $\sigma_\varpi$ nous est fournie, et le calcul est de type $d=\frac{cte}\varpi$. Ainsi,
 
 \begin{equation}\label{eq.parallax-error}
     \frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
     \sigma_d=d\left|\frac{\sigma_\varpi}{\varpi}\right|
 \end{equation}
 
-car % formulation a modif ?
+car % formulation a modif ? pk j'ai noté +par ailleurs ? preuve juste ?
 
 \[
-d\cdot w=cte \Leftrightarrow \partial (dw)=0 \Leftrightarrow d\partial w=|-w\partial d|
+d\, w=cte \Leftrightarrow \partial (d\,w)=0 \Leftrightarrow d\,\partial w=-w\,\partial d
 \]
 
-On peut alors automatiser ce calcul à l'aide d'un simple code Python, facilement adaptable:
+On peut alors implémenter ce calcul à l'aide d'un code Python facilement adaptable:
 
 % impossible de mettre des caractères spéciaux, tant pis.
 \begin{lstlisting}
 #%% Parallax
 # Traitements preliminaires
-input=open("/home/alpha/Documents/PPR/PPR vscode/gaia-dr2-allwise-2mass-ppmxl.csv",'r')
-output=open("/home/alpha/Documents/PPR/PPR vscode/parallax_results.txt",'w')
+input=open("filepath.csv",'r')
+output=open("dirpath/parallax_results.txt",'w')
 
 title=input.readline()
 title=title.strip('\n')
@@ -238,14 +240,21 @@ input.close()
 print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \end{lstlisting} % note: in biblio, if \aap or \mnras \apj, raccourcis internes aux journeaux scientifiques: scractl connait pas.
 
-La section 3.2 de \citet{DR2-parallax} cautionne cette approche si la parallaxe est positive, 
-donc logique, et si le ratio $f=\frac{\sigma_\varpi}{\varpi}$ est petit. \citet{parallax-stats} nous informe que cette limite est $20\%$.
+La section 3.2 de \citet{DR2-parallax} confirme \cref{eq.parallax} si la parallaxe est positive, 
+donc a un sens physique, et si l'erreur relative $f=\frac{\sigma_\varpi}{\varpi}$ est inférieure à $20\%$ \citep{parallax-stats}.
 % origine: a mettre ? Lorsque l'erreur relative $f$ augmente, la distribution de probabilité de la distance calculée se déforme, s'étire vers l'infini et déplace la valeur la plus probable loin de la valeur réelle. AI.
 
 \section{Chandelles standard}
-\lipsum[4]
+Certains objets ont des propriétés physiques directement liées à leur luminosité, mesurée en magnitude. % def
+Il existe différents types mais nous en étudierons 2.
+
 \subsection{Céphéides}
-\lipsum[5]
+Comme annoncé par \citet{cepheid-method} dans l'introduction, un certain nombre de méthodes existe pour déterminer le lien entre période et luminosité, avec parfois une mesure intermédiaire de couleur.
+Cela permet de calibrer la méthode, afin de l'étendre à un catalogue plus vaste d'objets.
+Nous nous baserons sur les travaux de \citet{cepheid-calibration} qui calibre la méthode pour les données de Gaia.
+% temp
+On utilise les données de \citet{cepheid_source}.
+
 \subsection{Supernovae 1a} % pas commencé
 \lipsum[6]
 \section{Conclusion}
@@ -259,6 +268,10 @@ Data Processing and Analysis Consortium (DPAC,
 \url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}). Funding for the DPAC
 has been provided by national institutions, in particular the institutions
 participating in the {\itshape Gaia} Multilateral Agreement.
+
+This research has made use of the VizieR catalogue access tool, CDS,
+Strasbourg, France (DOI : 10.26093/cds/vizier). The original description 
+of the VizieR service was published in 2000, A\&AS 143, 23
 
 % biblio. A annoncer ?
 
