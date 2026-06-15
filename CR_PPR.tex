@@ -14,10 +14,11 @@
 
 \usepackage{lastpage} % spécifique, pr derniere page
 \usepackage[headsepline=0.4pt]{scrlayer-scrpage} % pr en-tete et pied-de page, optimisé scratcl (koma-type)
+\automark{section} % active auto...
 \clearpairofpagestyles % clear défaut
 
 \rohead{\includegraphics[height=13.5pt]{utln.png}} % taille fonction de la place dispo. Pr augmenter ajouter \usepackage[headheight=25pt]{geometry}
-\lohead{\leftmark} % trouver l'affichage de la section en cours, left pr section, right pr subsection. Non.
+\lohead{\leftmark} % trouver l'affichage de la section en cours, left pr section, right pr subsection. OUI!!
 
 \cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
 
@@ -245,15 +246,79 @@ donc a un sens physique, et si l'erreur relative $f=\frac{\sigma_\varpi}{\varpi}
 % origine: a mettre ? Lorsque l'erreur relative $f$ augmente, la distribution de probabilité de la distance calculée se déforme, s'étire vers l'infini et déplace la valeur la plus probable loin de la valeur réelle. AI.
 
 \section{Chandelles standard}
-Certains objets ont des propriétés physiques directement liées à leur luminosité, mesurée en magnitude. % def
+Certains objets ont des propriétés physiques directement liées à leur luminosité absolue $M$, que l'on peut ensuite comparer 
+avec la luminosité apparente $m$ pour obtenir directement la distance $d$ qui nous sépare de l'objet à l'aide de l'équation du module de distances 
+% a sourcer
+
+\begin{equation}\label{eq.module_distance}
+    \mu = m-M = 5\log_{10}(d)-5 
+    \Longleftrightarrow d = 10^{\frac{m-M+5}{5}}
+\end{equation}
+
 Il existe différents types mais nous en étudierons 2.
 
 \subsection{Céphéides}
-Comme annoncé par \citet{cepheid-method} dans l'introduction, un certain nombre de méthodes existe pour déterminer le lien entre période et luminosité, avec parfois une mesure intermédiaire de couleur.
-Cela permet de calibrer la méthode, afin de l'étendre à un catalogue plus vaste d'objets.
-Nous nous baserons sur les travaux de \citet{cepheid-calibration} qui calibre la méthode pour les données de Gaia.
-% temp
-On utilise les données de \citet{cepheid_source}.
+Il a été découvert que certaines étoiles qui pulsent appellées céphéides possèdent une relation de proportionnalité 
+entre leur période $P$ de pulsation et leur luminosité absolue $M$ \citep{Leavitt1908_cepheid-origin}. 
+Ainsi, si l'on parvient à déterminer la relation qui les lie, nous pouvons déterminer la distance qui nous sépare de toute céphéide
+à l'aide de la relation connue comme la Loi de Leavitt ($a$ et $b$ les constantes à déterminer): % source suffit ?
+
+\begin{equation}\label{eq.leavitt-law}
+    M=a \log_{10}(P) +b
+\end{equation}
+
+Le plus grand problème de cette méthode est l'extinction interstellaire: 
+l'espace est rempli de poussières qui atténuent la lumière et la filtre, comme le ferait une atmosphère.
+Pour pallier à ce problème, on utilise l'indice de Wesenheit \citep{Madore1982_Wesenheit}.
+
+\subsubsection{Caibration}
+Pour cette étape nous nous basons sur \citet{cepheid-calibration} pour la théorie, qui calibre spécifiquement pour Gaia.
+En effet, de nombreux problèmes se posent: 
+
+Premièrement, les étoiles suffisamment proches pour utiliser la parallaxe, et pour lesquelles la mesure est suffisamment fiable 
+sont peu nombreuses. 
+
+Ensuite, la nature variable de la luminosité des céphéides tant utile pour cette méthode et leur luminosité moyenne très élevée
+dénaturent la mesure de la parallaxe: des étoiles proches de ces céphéides doivent être utilisées comme proxy. 
+
+Enfin, nous l'avons vu, le calcul direct de la parallaxe $d=\frac{1}{\varpi}$ devient complètement faussé lorsque l'erreur relative est supérieure à $20\%$.
+\citet{cepheid-calibration} utilisent l'Astrometric Based Luminosity (ABL), outil qui joint l'équation de la parallaxe \cref{eq.parallax} 
+au module de distance \cref{eq.module_distance}: % a développer !
+
+\begin{equation}\label{eq.ABL} % delete, concerne plus ? si.
+    \text{ABL} = 10^{0.2 M} = \varpi 10^{0.2 m - 2}
+\end{equation}
+
+Cependant, le satellite Gaia n'est pas concu pour les distances les plus lointaines, il faudrait, en théorie, 
+pairer ces données avec d'autres téléscopes possédant les filtres proposés par \citet{cepheid-calibration} dans leur tableau 7. 
+Comme nous avons seulement pu récupérer des données venant de Gaia \citep{cepheid_source}, 
+nous choisissons d'y rester et d'utiliser la calibration de \citet{Ripepi_datapaper}. 
+Ainsi, la fonction de Wesenheit devient (section 2, équation 2):
+
+\begin{equation}\label{eq.Wesenheit}
+    W(G,G_{BP},G_{RP})=m=G-1.90(G_{BP}-G_{RP})
+\end{equation}
+
+On lit ensuite les constantes $a$ et $b$ dans le tableau 3 de \citet{Ripepi_datapaper}, 
+section \textit{Selected} avec la méthode $PW_A$ correspondant à l'ABL, et pour les céphéides pures ($DCEP_F$). % enlever $$ pr DCEP_F mais sinon erreur...
+On lit par ailleurs un $\sigma_{ABL}=0.011$ le plus bas du tableau, ce qui conforte ce choix comme fiable.
+Ainsi,
+
+\begin{equation}\label{eq.cepheid-constants}
+    \begin{cases*}
+        a=-2.837 \pm 0.081\\
+        b=-3.183 \pm 0.097
+    \end{cases*}
+\end{equation}
+
+coefficients que l'on pourra injecter dans \cref{eq.leavitt-law}, comme confirmé par l'équation 7 dans \citet{Ripepi_datapaper}, 
+avec $a=\beta$ et $b=\alpha$. Finalement,
+
+\begin{equation}\label{eq.leavitt-calibree}
+    W_A=M=-2.837-3.183\log_{10}(P)
+\end{equation}
+
+Nous pouvons donc, en injentant \cref{eq.leavitt-calibree}et \cref{eq.Wesenheit} dans \cref{eq.module_distance}, on peut obtenir la distance de toute céphéide.
 
 \subsection{Supernovae 1a} % pas commencé
 \lipsum[6]
