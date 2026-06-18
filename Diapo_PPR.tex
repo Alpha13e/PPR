@@ -1,13 +1,215 @@
-\documentclass[hyperref={pdfpagemode=FullScreen,colorlinks=false}]{beamer}
+\documentclass[10pt,hyperref={pdfpagemode=FullScreen,colorlinks=false}]{beamer}
 \usepackage{concrete}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{natbib}
+\bibliographystyle{apalike} % on l'avait mis a l'emplacement de la biblio ds document...
 \usepackage[french]{babel}
+\usepackage{textcomp}
+\usepackage{mathtools,amssymb}
+\usepackage{lmodern}
+
+\usepackage{microtype} % harmonise fonts
+\usepackage{tikz}
+
+\usepackage{listings}   % insérer du code, standard. Voir minted, peut etre dangereux
+
+% base IA personnalisée
+\definecolor{fondCode}{RGB}{248, 248, 248}
+\definecolor{vertCommentaire}{RGB}{0, 128, 0}
+\definecolor{mauveChaine}{RGB}{163, 21, 21}
+
+\lstset{
+    language=python,
+    backgroundcolor=\color{fondCode},      % Couleur de fond très claire
+    basicstyle=\ttfamily,            % Police machine à écrire, taille réduite. ajouter \scriptsize car diapo ?
+    keywordstyle=\color{blue}, % Mots-clés en bleu et gras (def, for, in...)
+    commentstyle=\color{vertCommentaire}, % Commentaires en vert et italique
+    stringstyle=\color{mauveChaine},       % Texte entre guillemets en rouge/mauve
+    numbers=left,
+    numberstyle=\small\color{darkgray},         % ou tiny ?
+    numbersep=10pt,                        % Écart entre les numéros et le code
+    frame=single,                          % Ajoute un cadre fin autour du code
+    rulecolor=\color{lightgray},           % Couleur du cadre
+    tabsize=4,                             % Taille des tabulations
+    breaklines=true,                       % Retour à la ligne automatique si trop long
+    breakatwhitespace=true,                % Coupe de préférence aux espaces
+    upquote=true,                          % Vrais guillemets droits (nécessite textcomp)
+    keepspaces=true                        % Respecte l'indentation Python
+}
+
 \usetheme{Warsaw}
+
+\title[Mesures de distance stellaire]{Etude de différentes méthodes de mesure de distance stellaire}
+\author{Quentin Buet, SI \and Antoine Roueff} % mettre SI ailleurs ?
+\institute[UTLN - IM2NP]{Université de Toulon \and IM2NP}
+\date{\today} % Ou une date fixe
+
+\titlegraphic{
+    \includegraphics[height=1.5cm]{utln.png}
+    \hspace{2cm}
+    \includegraphics[height=1.5cm]{im2np.jpg}
+}
 
 
 \begin{document}
+\begin{frame}[plain] % plain retire les bandeaux
+    \titlepage
+\end{frame}
+
+\begin{frame}{Plan et Contexte}
+    \begin{columns}[T] % [T] aligne le texte des deux colonnes par le haut (Top)
+        \begin{column}{0.45\textwidth}
+            \tableofcontents
+        \end{column}        
+        \begin{column}{0.5\textwidth}% ajouter abstract qd fini
+            \begin{center}
+                \textbf{Abstract}
+            \end{center}% trop gros, à simplifier
+        
+            \textit{Contexte. }La mission du satellite Gaia % date/source
+            a permis d'enrichir grandement notre carte du ciel, 
+            et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais)
+        
+            \textit{But. }Nous tentons de reconstituer cette échelle de distance stellaire 
+             afin d'en comprendre les mécanismes et difficultés. 
+        
+            \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia %\citep{DR2}, 
+            les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
+            L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}
+        
+            \textit{Résultats. }
+        
+            \textit{Conclusions. }
+        \end{column}
+        
+    \end{columns}
+\end{frame}
+
 \begin{frame}
-nzruvnczoi
+    \frametitle{Introduction}
+    Les distances stellaires étant sans commune mesure avec celles terrestres, nous devons inventer de nouvelles méthodes de mesure:
+\\[0.5cm]
+\begin{description} % j'aime pas le rendu. manque bulet points ?
+    \item[La Parallaxe] calcule la distance d'un objet par trigonométrie en mesurant son angle d'observation.
+    \item[Les chandelles standard] sont des objets dont une propriété particulière permet de déterminer sa luminosité réelle,
+        et donc sa distance.
+    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
+        Cette méthode ne sera pas traitée ici. % c'est tout ?
+\end{description}
+\end{frame}
+
+\begin{frame}
+    \frametitle{La Parallaxe}
+    \framesubtitle{Principe}
+    % tikz shéma
+    % formule lien mas->deg ?
+    \begin{figure}[htbp] % généré par ia
+        \resizebox*{0.75\textwidth}{!}{
+        \begin{tikzpicture}
+
+            % Orbite de la Terre (vue de dessus, donc parfaitement circulaire)
+            \draw[dashed, color=gray] (0,0) circle (2cm);
+
+            % Les côtés du triangle rectangle
+            \draw[thick] (0,0) -- (-6,0) node[midway, below] {$d\,(pc)$}; % Axe Soleil-Étoile
+            \draw[thick] (0,0) -- (0,2) node[midway, right] {$r\,$(ua)}; % Axe Soleil-Terre
+            \draw[thick] (-6,0) -- (0,2); % Ligne de visée Terre-Étoile
+
+            % second angle (Terre)
+            \draw[dashed, color=gray] (-2.5,2) -- (0,2);
+            \draw (-1.5,2) arc[start angle=0, end angle=18,radius=-1.5cm] node[midway, left=3.5pt,yshift=-3pt] {$\varpi\,(mas)$};
+
+            % Symbole de l'angle droit au niveau du Soleil
+            \draw (-0.3,0) -- (-0.3,0.3) -- (0,0.3);
+
+            % Angle de parallaxe (au niveau de l'étoile)
+            % L'étoile est en (-6,0). Le rayon fait 1.5cm. L'angle d'élévation est d'environ 18.4 degrés.
+            \draw (-4.5,0) arc[start angle=0, end angle=18.4, radius=1.5cm] node[midway, right=4pt, yshift=2pt] {$\varpi\,(mas)$};
+
+            % Placement des astres
+            \fill[orange] (0,0) circle (4pt) node[below right, text=black] {Soleil};
+            \fill[blue] (0,2) circle (2pt) node[above right, text=black] {Terre};
+            \fill[black] (-6,0) circle (2pt) node[above left] {Objet};
+
+        \end{tikzpicture}
+        }
+        \caption{Schéma de principe de la parallaxe (pas à l'échelle).}
+        \label{fig.parallax}
+    \end{figure}
+
+    \begin{equation*}
+        1\,mas=\frac{10^{-3}}{3600}^\circ=3.6\, 10^{-6\,\circ}
+    \end{equation*}
+
+    \begin{equation*}\label{eq.parallax}
+        \tan(\varpi)=\frac{r}{d}\approx \varpi 
+        \Longleftrightarrow \boxed{d=\frac{r}{\varpi}}
+    \end{equation*}
+\end{frame}
+
+\begin{frame}
+    \frametitle{La Parallaxe}
+    \framesubtitle{Application}
+    % Logo Gaia en marge/coté, formule erreur, mention directe sources ? comment remplir ?
+    % ajouter bit apres code ! mention f (equation)
+    
+\end{frame}
+
+\begin{frame}
+    \frametitle{La Parallaxe}
+    \framesubtitle{Programme}
+    % insert code here
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Principe}
+    % image cepheid, leavitt ? formule leavitt
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Théorie}
+    % les 2 magnitudes, 
+    On note que plus un astre est lumineux, plus $M$ est négatif. % réécrire
+    % extinction
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Calibration}
+    % liste raisons calibration qqn d'autre
+    % equation ABL, mention Rippepi
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Calibration}
+    % Lister 3 équations. coller tableau pr lire le bon param ?
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Programme}% 2nd program
+\end{frame}
+
+\begin{frame}
+    \frametitle{Chandelles standard: les Céphéides}
+    \framesubtitle{Résultat}
+    % résultat pr discuter des erreurs et puissance méthode
+\end{frame}
+
+\begin{frame}
+    \frametitle{Conclusion}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Remerciements}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Bibliographie}
+    \bibliography{CR_PPR}
 \end{frame}
 \end{document}

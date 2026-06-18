@@ -12,3 +12,5 @@ gaia-dr2-allwise-2mass-ppmxl.csv
 *.toc
 *.bbl
 *.blg
+*.snm
+*.nav
