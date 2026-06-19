@@ -22,12 +22,12 @@
 \lstset{
     language=python,
     backgroundcolor=\color{fondCode},      % Couleur de fond très claire
-    basicstyle=\ttfamily,            % Police machine à écrire, taille réduite. ajouter \scriptsize car diapo ?
+    basicstyle=\ttfamily\scriptsize,            % Police machine à écrire, taille réduite. ajouter \scriptsize car diapo ?
     keywordstyle=\color{blue}, % Mots-clés en bleu et gras (def, for, in...)
     commentstyle=\color{vertCommentaire}, % Commentaires en vert et italique
     stringstyle=\color{mauveChaine},       % Texte entre guillemets en rouge/mauve
     numbers=left,
-    numberstyle=\small\color{darkgray},         % ou tiny ?
+    numberstyle=\tiny\color{darkgray},         % ou tiny ?
     numbersep=10pt,                        % Écart entre les numéros et le code
     frame=single,                          % Ajoute un cadre fin autour du code
     rulecolor=\color{lightgray},           % Couleur du cadre
@@ -102,8 +102,8 @@
 \begin{frame}
     \frametitle{La Parallaxe}
     \framesubtitle{Principe}
-    % tikz shéma
-    % formule lien mas->deg ?
+    % tikz shéma done
+    % formule lien mas->deg ? done
     \begin{figure}[htbp] % généré par ia
         \resizebox*{0.75\textwidth}{!}{
         \begin{tikzpicture}
@@ -153,27 +153,105 @@
     \framesubtitle{Application}
     % Logo Gaia en marge/coté, formule erreur, mention directe sources ? comment remplir ?
     % ajouter bit apres code ! mention f (equation)
-    
+    \begin{columns}[T] % aligned with top
+        \begin{column}{0.3\textwidth}
+            \textbf{Source:}
+            \\[8pt]
+            \includegraphics{gaia_logo.png}
+
+            Le satellite est positionné sur le point L2, mais les calculs sont ramenée pour $r=1$~ua.
+
+            La définition du parsec étant fonction de l'arcseconde, $[d]=pc$.
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \textbf{Erreur:}
+
+            On a un calcul de type $d=\frac{cte}\varpi$ avec $\sigma_d$ l'incertitude sur la distance et celle sur la mesure $\sigma_\varpi$ fournie:
+            \[
+            d\, w=cte \Leftrightarrow \partial (d\,w)=0 \Leftrightarrow d\,\partial w=-w\,\partial d
+            \]
+            \begin{equation*}\label{eq.parallax-error}
+                \frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
+                \sigma_d=d\left|\frac{\sigma_\varpi}{\varpi}\right|
+            \end{equation*}
+            Cependant, selon \citet[Section~3.2]{DR2-parallax}, deux conditions supplémentaires s'imposent:
+            \begin{equation*}
+                f=\frac{\sigma_\varpi}{\varpi}<20\%
+            \end{equation*}
+            \begin{equation*}
+                \varpi>0
+            \end{equation*}
+        \end{column}
+    \end{columns}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile] % étonnament permet de compiler
     \frametitle{La Parallaxe}
     \framesubtitle{Programme}
-    % insert code here
+\begin{lstlisting}
+# Importation des fichiers (coupee)
+output.write("source_id\tparallax (mas)\tparallax_error(mas)\tdistance(pc)\tdistance_error (pc)\n")
+# Automatisation
+i=0 # compte les echecs
+n=100 # nombre de lignes a lire, arbitraire
+
+for _ in range(n):
+    l=input.readline()
+    id,par,perr,*_=l.split(',')
+
+    par=float(par)+0.029 # erreur zero-point (-biais, biais=-0.029)
+    f=abs(float(perr)/par) # calcul de la qualite
+    dist=1/(par*1e-3) 
+
+    if f<0.2 and dist>0:
+        derr=dist*f # propagation de l'erreur
+        output.write(f"{id}\t{par}\t{perr}\t{dist}\t{derr}\n")
+    else:
+        i+=1
+
+output.close()
+input.close()
+print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Principe}
     % image cepheid, leavitt ? formule leavitt
+    \begin{figure}
+        \resizebox*{0.75\textwidth}{!}{
+        \includegraphics{cepheid.jpg}}% source esa/hubble
+    \end{figure}
+    \begin{equation*}\label{eq.leavitt-law} % en bas
+        M\propto \log_{10}(P)
+    \end{equation*}
+    \centering\itshape
+    Loi de Leavitt
 \end{frame}
 
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Théorie}
     % les 2 magnitudes, 
-    On note que plus un astre est lumineux, plus $M$ est négatif. % réécrire
-    % extinction
+    \textbf{La magnitude,} unité de luminosité sans dimension:
+    \begin{block}{La magnitude absolue}
+        \begin{equation*}
+            M=-2.5\,\log_{10}(\frac{l}{4\pi(10\,pc)^2L_{Soleil}})+k
+        \end{equation*}
+    \end{block}
+
+    \begin{block}{La magnitude apparente}
+        \begin{equation*}\label{eq.module_distance}
+            \mu = m-M = 5\log_{10}(d)-5 
+            \Longleftrightarrow d = 10^{\frac{m-M+5}{5}}
+        \end{equation*}
+        Magnitude mesurée à une distance $d$, liée à $M$ par le \textbf{module de distance}.
+    \end{block}
+    Cependant, des poussières absorbent les rayonnements, c'est \textbf{l'extinction interstellaire}.
+    Pour y pallier on utilise l'indice de Wesenheit. % on l'intègre pas de suite ?
+    \\[8pt]
+    \textit{On note que plus un astre est lumineux, plus $M$ est négatif.} % réécrire
 \end{frame}
 
 \begin{frame}
@@ -181,12 +259,41 @@
     \framesubtitle{Calibration}
     % liste raisons calibration qqn d'autre
     % equation ABL, mention Rippepi
+    J'ai dû déléguer la calibration, utiliser celle de chercheurs car:
+    \begin{itemize}
+        \item Peu de céphéides sont suffisamment proches pour utiliser la parallaxe et fiables.
+        \item Elles sont brillantes et de luminosité variable: on doit trouver un proxy.
+        \item Les problèmes de la parallaxe s'appliquent toujours: on doit utiliser l'Astrometric Based Luminosity (ABL):
+         \begin{equation*}\label{eq.ABL} % delete, concerne plus ? si.
+            \text{ABL} = 10^{0.2 M} = \varpi 10^{0.2 m - 2}
+         \end{equation*}
+    \end{itemize}
+    On a utilisé la théorie de \citet{cepheid-calibration}, mais la calbration liée à nos données \citet{Ripepi_datapaper},
+    obtenues via la plateforme VizieR \textit{(Université de Strasbourg)}.
+    %{\centering\includegraphics[height=0.1\textwidth]{vizier_logo.png}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Calibration}
     % Lister 3 équations. coller tableau pr lire le bon param ?
+    La fonction de Wesenheit adaptée aux capteurs de Gaia devient:
+    \begin{equation*}\label{eq.Wesenheit}
+        W(G,G_{BP},G_{RP})=m=G-1.90(G_{BP}-G_{RP})
+    \end{equation*}
+
+    On lit le tableau 3: Nous voulons la méthode de l'ABL ($PW_A$) appliquées aux céphéides classiques (DCEP\_F)
+    Alors, $\sigma_{ABL}=0.011$. On obtient la loi de Leavitt:
+    \begin{equation*}\label{eq.leavitt-calibree}
+        W_A=M=-2.837-3.183\log_{10}(P)
+    \end{equation*}
+
+    On mêle les 3 équations:
+
+    \[
+        \boxed{
+        d = 10^{\dfrac{G-1.90(G_{BP}-G_{RP})--2.837-3.183\log_{10}(P)+5}{5}}}
+    \]
 \end{frame}
 
 \begin{frame}
@@ -206,10 +313,22 @@
 
 \begin{frame}
     \frametitle{Remerciements}
+
+    This work has made use of data from the European Space Agency (ESA) mission
+    {\itshape Gaia} (\url{https://www.cosmos.esa.int/gaia}), processed by the {\itshape Gaia}
+    Data Processing and Analysis Consortium (DPAC,
+    \url{https://www.cosmos.esa.int/web/gaia/dpac/consortium}). Funding for the DPAC
+    has been provided by national institutions, in particular the institutions
+    participating in the {\itshape Gaia} Multilateral Agreement.
+    \\[8pt]
+    This research has made use of the VizieR catalogue access tool, CDS,
+    Strasbourg, France (DOI : 10.26093/cds/vizier). The original description 
+    of the VizieR service was published in 2000, A\&AS 143, 23
 \end{frame}
 
-\begin{frame}
-    \frametitle{Bibliographie}
+\begin{frame}[allowframebreaks]{Bibliographie}
+    \small % pour les 4 pages de citation
+    \nocite{*}
     \bibliography{CR_PPR}
 \end{frame}
 \end{document}

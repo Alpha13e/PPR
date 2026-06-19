@@ -207,7 +207,6 @@ On peut alors implémenter ce calcul à l'aide d'un code Python facilement adapt
 
 % impossible de mettre des caractères spéciaux, tant pis.
 \begin{lstlisting}
-#%% Parallax
 # Traitements preliminaires
 input=open("filepath.csv",'r')
 output=open("dirpath/parallax_results.txt",'w')
@@ -250,8 +249,7 @@ Certains objets ont des propriétés physiques directement liées à leur lumino
 que l'on peut ensuite comparer avec la luminosité apparente $m\,(mag)$ pour obtenir directement la distance $d\,(pc)$ 
 qui nous sépare de l'objet à l'aide de l'équation du module de distances \cref{eq.module_distance}.
 
-
-Il existe différents types mais nous en étudierons 2.
+Il existe différents types mais nous en étudierons une.
 
 \subsection{Céphéides}
 Il a été découvert que certaines étoiles qui pulsent appellées céphéides possèdent une relation de proportionnalité 
@@ -316,7 +314,7 @@ Ainsi, la fonction de Wesenheit devient:
 \end{equation}
 
 On lit ensuite les constantes $a$ et $b$ dans \citet[Tableau~3]{Ripepi_datapaper}: 
-section \textit{Selected} avec la méthode $PW_A$ correspondant à l'ABL, et pour les céphéides pures ($DCEP_F$). % enlever $$ pr DCEP_F mais sinon erreur...
+section \textit{Selected} avec la méthode $PW_A$ correspondant à l'ABL, et pour les céphéides pures (DCEP\_F).
 On lit par ailleurs un $\sigma_{ABL}=0.011$ le plus bas du tableau, ce qui conforte ce choix comme fiable.
 Ainsi,
 

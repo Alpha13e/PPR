@@ -5,6 +5,7 @@ gaia-dr2-allwise-2mass-ppmxl.csv
 # C'est lui qui semble marcher
 *.odp
 
+# Pour LaTeX
 *.aux
 *.log
 *.out
@@ -14,3 +15,4 @@ gaia-dr2-allwise-2mass-ppmxl.csv
 *.blg
 *.snm
 *.nav
+*.vrb
