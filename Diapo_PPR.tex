@@ -42,14 +42,13 @@
 
 \title[Mesures de distance stellaire \hspace{16em} \insertframenumber/\inserttotalframenumber]{Etude de différentes méthodes de mesure de distance stellaire}\author{Quentin Buet, SI \and Antoine Roueff} % mettre SI ailleurs ?
 \institute[UTLN - IM2NP]{Université de Toulon \and IM2NP}
-\date{23 juin 2026} % Ou une date fixe
+\date{23 juin 2026}
 
 \titlegraphic{
     \includegraphics[height=1.5cm]{utln.png}
     \hspace{2cm}
     \includegraphics[height=1.5cm]{im2np.jpg}
 }
-
 
 \begin{document}
 \begin{frame}[plain] % plain retire les bandeaux
@@ -236,7 +235,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
 \subsection{Calibration}
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
-    \framesubtitle{Calibration}
+    \framesubtitle{Calavons ibration}
     % liste raisons calibration qqn d'autre
     % equation ABL, mention Rippepi
     J'ai dû déléguer la calibration, utiliser celle de chercheurs car:
@@ -262,7 +261,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
         W(G,G_{BP},G_{RP})=m=G-1.90(G_{BP}-G_{RP})
     \end{equation*}
 
-    On lit le tableau 3: Nous voulons la méthode de l'ABL ($PW_A$) appliquées aux céphéides classiques (DCEP\_F)
+    On lit le tableau 3: Nous employons la méthode de l'ABL ($PW_A$) appliquée aux céphéides classiques (DCEP\_F)
     Alors, $\sigma_{ABL}=0.011$. On obtient la loi de Leavitt:
     \begin{equation*}\label{eq.leavitt-calibree}
         W_A=M=-2.837-3.183\log_{10}(P)
@@ -307,6 +306,10 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
     This research has made use of the VizieR catalogue access tool, CDS,
     Strasbourg, France (DOI : 10.26093/cds/vizier). The original description 
     of the VizieR service was published in 2000, A\&AS 143, 23
+    \\[8pt]
+    Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
+    \\[8pt]
+    Enfin, je tiens à remercier chalereusement mon tuteur Antoine Roueff pour son aide précieuse.
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Bibliographie}

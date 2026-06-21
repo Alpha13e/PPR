@@ -32,7 +32,7 @@
 #print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 
 #%%
-from numpy import log10
+from numpy import log10, log
 
 n=2000
 count=0
@@ -72,9 +72,10 @@ for _ in range(n):
         M=-2.837-3.183*log10(float(period))
         m=float(G)-1.9*(float(Gbp)-float(Grp))
 
-        cepdist=10**((m-M+5)/5) # manque l'erreur
+        cepdist=10**((m-M+5)/5)
+        ceperr=0.2*log(10)*cepdist*0.011
         
-        output.write(f"{id}\t{pardist}\t{parderr}\t{cepdist}\ttodo\n")
+        output.write(f"{id}\t{pardist}\t{parderr}\t{cepdist}\t{ceperr}\n")
 
 input.close()
 output.close()

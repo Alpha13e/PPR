@@ -66,8 +66,8 @@
     \includegraphics[height=2cm]{im2np.jpg}
 }
 \title{Etude de différentes méthodes de mesure de distance stellaire}
-\author{Quentin Buet, Antoine Roueff} % a confirmer
-\date{\today} % a specifier. c'est bon !
+\author{Quentin Buet, Antoine Roueff}
+\date{23 juin 2026} % a specifier. c'est bon !
 
 \begin{document} % max 15 pages
 \vfill % chaque \vfill a le meme espace. Evite de tout redéfinir avec l'enviro titlepage.
@@ -78,20 +78,25 @@
         \textbf{Abstract}
     \end{center} % est-ce nécessaire ?
 
-    \textit{Contexte. }La mission du satellite Gaia % date/source
-    a permis d'enrichir grandement notre carte du ciel, 
-    et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais)
+    \textit{Contexte. }La mission du satellite Gaia a permis d'enrichir grandement notre carte du ciel, 
+    et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais).
+    Ainsi, différentes méthodes de mesure de distance stellaire sont peaufinées, enrichissant notre carte du ciel.
 
     \textit{But. }Nous tentons de reconstituer cette échelle de distance stellaire 
-     afin d'en comprendre les mécanismes et difficultés. 
+     afin d'en comprendre les mécanismes et difficultés. Nous nous concentrons sur 2 méthodes principales: 
+     la parallaxe géométrique et les chandelles standard, plus précisément les céphéides.
 
     \textit{Méthodes. }Nous nous basons sur la seconde publication de la mission du satellite Gaia \citep{DR2}, 
-    les papiers correspondants, ainsi que certaines recherches peaufinant les différentes méthodes.
-    L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}
+    les papiers correspondants, ainsi que certaines recherches explicitant les différentes méthodes.
+    L'essentiel provient du journal scientifique \href{https://www.aanda.org/}{Astronomy \& Astrophysics (A\&A)}, 
+    tandis que les données proviennent de sources secondaires, par souci pratique.
 
-    \textit{Résultats. }\lipsum[3][1-3]
+    \textit{Résultats. }Nous appliquons les deux méthodes avec succès et les comparons pour découvrir que 
+    la méthode de la parallaxe géométrique est imparfaite et fortement perturbée par les erreurs de mesure.
 
-    \textit{Conclusions. }\lipsum[4][1-3]
+    \textit{Conclusions. }Les principales difficultés de ce domaine sont l'impossibilité de vérifier les résultats et 
+    l'échelle desdits résultats qui provoque d'importantes marges d'erreur. Nous n'avons pu étudier l'essentiel de l'échelle de distance stellaire
+    mais pouvons désormais saisir ses difficultés.
 \end{abstract}
 \vfill
 \pagebreak
@@ -108,16 +113,16 @@ En effet, cela mettrait des millénaires, ces distances sont collossales.
 C'est pourquoi les chercheurs conçoivent de nouvelles méthodes de mesure, nommées (en anglais) \textbf{The Distance Ladder}.
 Pour construire cette échelle, nous avons besoin de plusieurs méthodes complémentaires:
 
-\begin{description} % j'aime pas le rendu. manque bulet points ?
+\begin{description}
     \item[La Parallaxe] est fondée sur l'angle d'observation de l'objet stellaire (terme générique) % mieux ? quand même une parenthèse
         pour en déduire sa distance par trigonométrie. Cette méthode ne nécessite pas de calibration, mais n'est efficace que pour de courtes distances: 
         nous ne pouvons pas mesurer plus loin que la voie lactée.
-        %Elle permet généralement de calibrer d'autres méthodes.% pas si sur...
+        Sa version avancée permet généralement de calibrer d'autres méthodes.
     \item[Les chandelles standard] sont des objets dont une propriété particulière permet de déterminer sa luminosité réelle (sa magnitude),
         et donc sa distance, la loi de propagation de la lumière étant connue. 
         Ce champ de recherche est très dynamique mais nous nous concentrerons sur les céphéides.
-    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
-        Cette méthode ne sera pas traitée ici. % c'est tout ?
+    \item[L'effet Doppler (ou redshift)] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
+        Cette méthode ne sera pas traitée ici.
 \end{description}
 
 \section{Parallaxe}
@@ -127,7 +132,7 @@ Le principe de la parallaxe est simple: nous tournons autour du Soleil en une p�
 Selon un repère héliocentrique, et dans les périodes de mesure, l'objet est considéré fixe. % source ?
 Comme décrit \cref{fig.parallax}, on mesure l'angle $\varpi$ entre l'objet et la tangente à l'orbite, 
 et connaissant le rayon de cette orbite, on en détermine par trigonométrie la distance qui nous sépare de l'objet.
-Bien entendu, des complications arrivent bien vite: il a été prouvé que cette méthode diverge. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
+Bien entendu, des complications arrivent bien vite: il a été prouvé que cette méthode a une sensibilité critique aux erreurs de mesure. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
 
 \begin{figure}[htbp]
     \centering % généré par ia
@@ -163,7 +168,7 @@ Bien entendu, des complications arrivent bien vite: il a été prouvé que cette
 \end{figure}
 
 L'unité de mesure de la parallaxe notée $\varpi$ est la miliseconde d'arc ($mas$), soit un millième d'une seconde d'arc, elle même 
-$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\, 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
+$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\times 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
 Cette unité, très petite, justifie à elle seule l'utilisation de l'approximation des angles petits, \cref{eq.parallax}. 
 On rappelle qu'un angle de un degré approximé ainsi est déjà négligeable.
 
@@ -192,11 +197,13 @@ L'incertitude sur la mesure $\sigma_\varpi$ nous est fournie, et le calcul est d
     \sigma_d=d\left|\frac{\sigma_\varpi}{\varpi}\right|
 \end{equation}
 
-car % formulation a modif ? remplacer par par ailleurs ? preuve juste ?
+car
 
 \[
-d\, w=cte \Leftrightarrow \mathrm{d} (d\,w)=0 \Leftrightarrow d\,\mathrm{d} w=-w\,\mathrm{d} d
+d\, \varpi=cte \Leftrightarrow \mathrm{d} (d\,\varpi)=0 \Leftrightarrow d\,\mathrm{d} \varpi=-\varpi\,\mathrm{d} d
 \]
+
+\subsection{Programme}
 
 On peut alors implémenter ce calcul à l'aide d'un code Python:
 
@@ -255,7 +262,7 @@ entre leur période $P$ de pulsation et leur luminosité absolue $M$ \citep{Leav
 Ainsi, si l'on parvient à déterminer les coefficients de cette relation, nous pouvons déterminer la distance qui nous sépare de toute céphéide
 à l'aide de ce que l'on appelle la Loi de Leavitt:
 
-\begin{equation}\label{eq.leavitt-law} % c'est juste ?
+\begin{equation}\label{eq.leavitt-law}
     M\propto \log_{10}(P)
 \end{equation}
 
@@ -276,7 +283,7 @@ On note que plus un astre est lumineux, plus $M$ est négatif.
 
 \begin{equation}\label{eq.module_distance}
     \mu = m-M = 5\log_{10}(d)-5 
-    \Longleftrightarrow d = 10^{\frac{m-M+5}{5}}
+    \Longleftrightarrow \boxed{d = 10^{\frac{m-M+5}{5}}}
 \end{equation}
 
 Le plus grand biais de cette méthode est l'extinction interstellaire: 
@@ -295,9 +302,9 @@ corrompent la mesure de la parallaxe: des étoiles proches de ces céphéides do
 
 Enfin, nous l'avons vu, le calcul direct de la parallaxe $d\propto\frac{1}{\varpi}$ devient biaisé lorsque l'erreur relative est supérieure à $20\%$.
 \citet{cepheid-calibration} utilisent l'Astrometric Based Luminosity (ABL), outil qui joint l'équation de la parallaxe \cref{eq.parallax} 
-au module de distance \cref{eq.module_distance}: % a développer !
+au module de distance \cref{eq.module_distance}:
 
-\begin{equation}\label{eq.ABL} % delete, concerne plus ? si.
+\begin{equation}\label{eq.ABL}
     \text{ABL} = 10^{0.2 M} = \varpi 10^{0.2 m - 2}
 \end{equation}
 
@@ -333,12 +340,12 @@ avec $a=\beta$ et $b=\alpha$. Finalement,
 Nous pouvons donc obtenir la distance de toute céphéide à partir de sa période en injectant \cref{eq.leavitt-calibree} et \cref{eq.Wesenheit} dans \cref{eq.module_distance}.
 
 \begin{equation}\label{eq.full-cepheid}
-    \boxed{ 
-        d = 10^{\dfrac{G-1.90(G_{BP}-G_{RP})+2.837+3.183\log_{10}(P)+5}{5}}}
+    \boxed{
+        \log_{10}(d) = \frac{G-1.90(G_{BP}-G_{RP})+2.837+3.183\log_{10}(P)+5}{5}}
 \end{equation}
 
 \subsection{Erreur}
-On rappelle que si $f(x)=a^{u(x)}$, $f'(x)=u'(x)a^{u(x)}\ln(a)$. On identifie pour \cref{eq.module_distance}: % ai, j'ai trouvé cette formule nulle part ailleurs
+On rappelle que si $f(x)=a^{u(x)}$, $f'(x)=u'(x)a^{u(x)}\ln(a)$. On identifie pour \cref{eq.module_distance}:
 
 \begin{equation}\label{eq.error-cepheid}
     \frac{\mathrm{d} d}{\mathrm{d} M}
@@ -349,10 +356,106 @@ On rappelle que si $f(x)=a^{u(x)}$, $f'(x)=u'(x)a^{u(x)}\ln(a)$. On identifie po
 
 Nous pouvons donc intégrer cela dans notre code ({\itshape rappel: une incertitude est positive}).
 
-\section{Conclusion}
-\lipsum[9]
+\subsection{Programme}
+\begin{lstlisting}
+from numpy import log10, log
 
-% mandatory acknowledgement, copié-collé:
+n=2000
+count=0
+
+input=open("/filepath/cepheid_source.tsv",'r')
+output=open("/filepath/results.txt",'w')
+
+for _ in range(52): # la 53e est les premieres donnees
+    input.readline()
+
+output.write("source_id\tdistance_parallax(pc)\t"
+    f"distance_error_parallax (pc)\tdistance_cepheid"
+    f"\tdistance_error_cepheid\n")
+
+for _ in range(n):
+    line=input.readline().replace(' ','').strip().split(';')
+    if line[16]=='DCEP_F':
+        count+=1 # ouverture
+        id=line[0]
+        period,G,Gbp,Grp,parallax,errparallax=line[6:12]
+
+        # Paralaxe
+        parallax=float(parallax)+0.046 # celle adaptee selon ripepi p.4
+        f=abs(float(errparallax)/parallax)
+        pardist=1/(parallax*1e-3) 
+        if f<0.2 and pardist>0:
+            parderr=str(pardist*f)
+            pardist=str(pardist)
+        else:
+            pardist='NULL'
+            parderr='NULL'
+
+        # Cepheide
+
+        M=-2.837-3.183*log10(float(period))
+        m=float(G)-1.9*(float(Gbp)-float(Grp))
+
+        cepdist=10**((m-M+5)/5)
+        ceperr=0.2*log(10)*cepdist*0.011
+        
+        output.write(f"{id}\t{pardist}\t{parderr}\t"
+        "{cepdist}\t{ceperr}\n")
+
+input.close()
+output.close()
+print(count)
+\end{lstlisting}
+
+Voici un extrait des résultats (les identifiants ont été coupés par manque de place, unités en parsec):
+\footnote{Les résultats ainsi que l'ensemble des supports de recherche sont trouvables \url{https://github.com/Alpha13e/PPR}.}
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llll}
+distance\_parallax&distance\_error\_parallax&distance\_cepheid&distance\_error\_cepheid\\
+
+\hline
+
+NULL&NULL&18554.082960091277&93.98918064377824\\
+NULL&NULL&96055.50508287118&486.58714302843254\\
+184.100418410042&595.227674585529&4390.383125588219&22.240307622526483\\
+NULL&NULL&12006.970380521305&60.82355622246069\\
+NULL&NULL&21795.289802873747&110.40812067468092\\
+NULL&NULL&12771.880331860457&64.69835077562063\\
+NULL&NULL&15106.000881610327&76.52227537845188\\
+6410.25641025641&1109.4674556213017&19490.889364984214&98.73474886221945\\
+NULL&NULL&67362.68047790062&341.23826856357704\\
+NULL&NULL&92739.6792324371&469.7902064452502\\
+NULL&NULL&68812.25283361568&348.5813486980457\\
+NULL&NULL&19387.3103237186&98.21004983821685\\
+NULL&NULL&8432.666957387784&42.717253106582056\\
+3663.0036630036625&362.2750875498128&4851.386681322993&24.5756074360812\\
+581.3953488372093&30.083829096809087&642.2456263507611&3.2534154516069504\\
+NULL&NULL&15822.96681968548&80.15420055708383\\
+NULL&NULL&10766.319485708187&54.53880685924659\\
+NULL&NULL&93392.53633125017&473.0973762971313\\
+5882.352941176471&899.6539792387545&15869.261676120377&80.38871581896427\\
+1251.5644555694619&151.9421178851537&15241.151626167277&77.20690677584442\\
+\hline
+\end{tabular}}
+\end{center}
+
+On remarque une grande différence entre la méthode de la parallaxe et celle des céphéides.
+Comme mentionné plus tôt, inverser une mesure bruitée est très dangereux.
+C'est pourquoi les astrophysiciens utilisent aujourd'hui l'ABL pour calibrer d'autres méthodes.
+Aussi, on remarque l'avantage des Céphéides: bien que toute étoile n'est pas mesurable ainsi, 
+cela permet de mesurer bien plus loin, et plus fiablement (peux de céphéides purent avoir un calcul de parallaxe).
+
+D'autant plus que, on le rappelle, la mesure de la parallaxe n'est pas fiable pour un objet à la luminosité variable.
+
+\section{Conclusion}
+Nous avons pu appliquer 2 des méthodes fondamentales de mesure de distance stellaire et remarqué que, dans ce domaine,
+peu de concessions peuvent être faites. Une de ses principales difficultés est l'impossibilité de réèlement vérifier nos résultats.
+De plus, la nature astronomique des données provoque quasi-systématiquement des marges d'erreur toutes aussi grandes.
+
+Ce domaine est vaste et nous n'avons pas pu étudier les autres éléments de l'échelle de distance stellaire
+comme les autres céphéides, ou encore l'effet Doppler. Nous avons pu cependant étudier les difficultés qui lui sont propres 
+et appliquer deux méthodes fondamentales, l'une ancienne et limitée en portée et l'autre récente et plus complexe.
 
 \section*{Remerciements}
 
