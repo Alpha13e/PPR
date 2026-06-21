@@ -98,11 +98,6 @@
 
 \tableofcontents
 
-\section*{Remerciements}
-% todo, mais à la fin
-
-Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
-
 \newpage 
 
 \section{Introduction}
@@ -111,7 +106,7 @@ déstabilisant: il n'est pas possible, comme nous en avons l'habitude, de nous d
 En effet, cela mettrait des millénaires, ces distances sont collossales.
 
 C'est pourquoi les chercheurs conçoivent de nouvelles méthodes de mesure, nommées (en anglais) \textbf{The Distance Ladder}.
-Pour construire cette échelle, il faut plusieurs outils car chacun a ses qualités et défauts, et a besoin de l'autre pour fonctionner:
+Pour construire cette échelle, nous avons besoin de plusieurs méthodes complémentaires:
 
 \begin{description} % j'aime pas le rendu. manque bulet points ?
     \item[La Parallaxe] est fondée sur l'angle d'observation de l'objet stellaire (terme générique) % mieux ? quand même une parenthèse
@@ -120,7 +115,7 @@ Pour construire cette échelle, il faut plusieurs outils car chacun a ses qualit
         %Elle permet généralement de calibrer d'autres méthodes.% pas si sur...
     \item[Les chandelles standard] sont des objets dont une propriété particulière permet de déterminer sa luminosité réelle (sa magnitude),
         et donc sa distance, la loi de propagation de la lumière étant connue. 
-        Ce champ de recherche est très dynamique mais 2 types de chandelles standard se distinguent: les céphéides et les supernovae 1a.
+        Ce champ de recherche est très dynamique mais nous nous concentrerons sur les céphéides.
     \item[L'effet Doppler] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
         Cette méthode ne sera pas traitée ici. % c'est tout ?
 \end{description}
@@ -132,7 +127,7 @@ Le principe de la parallaxe est simple: nous tournons autour du Soleil en une p�
 Selon un repère héliocentrique, et dans les périodes de mesure, l'objet est considéré fixe. % source ?
 Comme décrit \cref{fig.parallax}, on mesure l'angle $\varpi$ entre l'objet et la tangente à l'orbite, 
 et connaissant le rayon de cette orbite, on en détermine par trigonométrie la distance qui nous sépare de l'objet.
-Bien entendu, des complications arrivent bien vite. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
+Bien entendu, des complications arrivent bien vite: il a été prouvé que cette méthode diverge. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
 
 \begin{figure}[htbp]
     \centering % généré par ia
@@ -200,10 +195,10 @@ L'incertitude sur la mesure $\sigma_\varpi$ nous est fournie, et le calcul est d
 car % formulation a modif ? remplacer par par ailleurs ? preuve juste ?
 
 \[
-d\, w=cte \Leftrightarrow \partial (d\,w)=0 \Leftrightarrow d\,\partial w=-w\,\partial d
+d\, w=cte \Leftrightarrow \mathrm{d} (d\,w)=0 \Leftrightarrow d\,\mathrm{d} w=-w\,\mathrm{d} d
 \]
 
-On peut alors implémenter ce calcul à l'aide d'un code Python facilement adaptable:
+On peut alors implémenter ce calcul à l'aide d'un code Python:
 
 % impossible de mettre des caractères spéciaux, tant pis.
 \begin{lstlisting}
@@ -242,17 +237,20 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 
 \citet[Section~3.2]{DR2-parallax} confirme \cref{eq.parallax} si la parallaxe est positive, 
 donc a un sens physique, et si l'erreur relative $f=\frac{\sigma_\varpi}{\varpi}$ est inférieure à $20\%$ \citep{parallax-stats}.
+Ces limites physiques nous limitent donc à des distances de l'ordre grandeur de la voie lactée. % ajouter des chiffres ?
 % origine: a mettre ? Lorsque l'erreur relative $f$ augmente, la distribution de probabilité de la distance calculée se déforme, s'étire vers l'infini et déplace la valeur la plus probable loin de la valeur réelle. AI.
 
 \section{Chandelles standard}
+Si nous souhaitons explorer plus loin, vers d'autres galaxies, nous devons construire une nouvelle marche à notre échelle.
+
 Certains objets ont des propriétés physiques directement liées à leur luminosité absolue $M\,(mag)$, 
 que l'on peut ensuite comparer avec la luminosité apparente $m\,(mag)$ pour obtenir directement la distance $d\,(pc)$ 
 qui nous sépare de l'objet à l'aide de l'équation du module de distances \cref{eq.module_distance}.
 
-Il existe différents types mais nous en étudierons une.
+Il en existe de différents types mais nous étudierons seulement les céphéides.
 
 \subsection{Céphéides}
-Il a été découvert que certaines étoiles qui pulsent appellées céphéides possèdent une relation de proportionnalité 
+Henrietta Leavitt a découvert que certaines étoiles qui pulsent appelées céphéides possèdent une relation de proportionnalité 
 entre leur période $P$ de pulsation et leur luminosité absolue $M$ \citep{Leavitt1908_cepheid-origin}. 
 Ainsi, si l'on parvient à déterminer les coefficients de cette relation, nous pouvons déterminer la distance qui nous sépare de toute céphéide
 à l'aide de ce que l'on appelle la Loi de Leavitt:
@@ -282,18 +280,18 @@ On note que plus un astre est lumineux, plus $M$ est négatif.
 \end{equation}
 
 Le plus grand biais de cette méthode est l'extinction interstellaire: 
-l'espace est rempli de poussières qui absorbent la lumière et la filtre, comme le ferait une atmosphère.
-Pour pallier à ce problème, on utilise l'indice de Wesenheit \citep{Madore1982_Wesenheit}.
+l'espace est rempli de poussières qui absorbent la lumière et la filtrent, comme le ferait une atmosphère.
+Pour pallier ce problème, on utilise l'indice de Wesenheit \citep{Madore1982_Wesenheit}.
 
-\subsubsection{Caibration}
+\subsubsection{Calibration}
 Pour cette étape nous nous basons sur \citet{cepheid-calibration} pour la théorie, qui calibre spécifiquement pour Gaia.
-En effet, de nombreux problèmes se posent: 
+En effet, de nombreux problèmes se posent:
 
 Premièrement, les étoiles suffisamment proches pour utiliser la parallaxe, et pour lesquelles la mesure est suffisamment fiable 
-sont peu nombreuses. 
+sont peu nombreuses.
 
 Ensuite, la nature variable de la luminosité des céphéides tant utile pour cette méthode et leur luminosité moyenne très élevée
-corrompent la mesure de la parallaxe: des étoiles proches de ces céphéides doivent être utilisées comme proxy. 
+corrompent la mesure de la parallaxe: des étoiles proches de ces céphéides doivent être utilisées comme mesure intermédiaire. 
 
 Enfin, nous l'avons vu, le calcul direct de la parallaxe $d\propto\frac{1}{\varpi}$ devient biaisé lorsque l'erreur relative est supérieure à $20\%$.
 \citet{cepheid-calibration} utilisent l'Astrometric Based Luminosity (ABL), outil qui joint l'équation de la parallaxe \cref{eq.parallax} 
@@ -315,7 +313,7 @@ Ainsi, la fonction de Wesenheit devient:
 
 On lit ensuite les constantes $a$ et $b$ dans \citet[Tableau~3]{Ripepi_datapaper}: 
 section \textit{Selected} avec la méthode $PW_A$ correspondant à l'ABL, et pour les céphéides pures (DCEP\_F).
-On lit par ailleurs un $\sigma_{ABL}=0.011$ le plus bas du tableau, ce qui conforte ce choix comme fiable.
+On lit par ailleurs un $\sigma_{ABL}=0.011$ le plus bas du tableau, ce qui conforte ce choix comme fiable, l'erreur étant faible.
 Ainsi,
 
 \begin{equation}\label{eq.cepheid-constants} % unités ?
@@ -332,10 +330,25 @@ avec $a=\beta$ et $b=\alpha$. Finalement,
     W_A=M=-2.837-3.183\log_{10}(P)
 \end{equation}
 
-Nous pouvons donc, en injectant \cref{eq.leavitt-calibree} et \cref{eq.Wesenheit} dans \cref{eq.module_distance}, on peut obtenir la distance de toute céphéide.
+Nous pouvons donc obtenir la distance de toute céphéide à partir de sa période en injectant \cref{eq.leavitt-calibree} et \cref{eq.Wesenheit} dans \cref{eq.module_distance}.
 
-\subsection{Supernovae 1a} % pas commencé
-\lipsum[6]
+\begin{equation}\label{eq.full-cepheid}
+    \boxed{ 
+        d = 10^{\dfrac{G-1.90(G_{BP}-G_{RP})+2.837+3.183\log_{10}(P)+5}{5}}}
+\end{equation}
+
+\subsection{Erreur}
+On rappelle que si $f(x)=a^{u(x)}$, $f'(x)=u'(x)a^{u(x)}\ln(a)$. On identifie pour \cref{eq.module_distance}: % ai, j'ai trouvé cette formule nulle part ailleurs
+
+\begin{equation}\label{eq.error-cepheid}
+    \frac{\mathrm{d} d}{\mathrm{d} M}
+    = -0.2\cdot 10^{0.2(m-M+5)}\cdot \ln(10)
+    =-0.2d\ln(10)
+    \Longleftrightarrow \boxed{\sigma_d=0.2\ln(10)d\sigma_M}
+\end{equation}
+
+Nous pouvons donc intégrer cela dans notre code ({\itshape rappel: une incertitude est positive}).
+
 \section{Conclusion}
 \lipsum[9]
 
@@ -353,6 +366,10 @@ participating in the {\itshape Gaia} Multilateral Agreement.
 This research has made use of the VizieR catalogue access tool, CDS,
 Strasbourg, France (DOI : 10.26093/cds/vizier). The original description 
 of the VizieR service was published in 2000, A\&AS 143, 23
+
+Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
+
+Enfin, je tiens à remercier chalereusement mon tuteur Antoine Roueff pour son aide précieuse.
 
 % biblio.
 
