@@ -2,13 +2,13 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
-\bibliographystyle{apalike} % on l'avait mis a l'emplacement de la biblio ds document...
+\bibliographystyle{apalike} % on l'avait mis a l'emplacement de la biblio dans document mais fonctionne ici...
 \usepackage[french]{babel}
 \usepackage{textcomp}
 \usepackage{mathtools,amssymb}
 \usepackage{lmodern}
 
-\usepackage{microtype} % harmonise fonts
+\usepackage{microtype} % harmonize fonts
 \usepackage{tikz}
 
 \usepackage{listings}   % insérer du code, standard. Voir minted, peut etre dangereux
@@ -68,12 +68,12 @@
     \frametitle{Introduction}
     Les distances stellaires étant sans commune mesure avec celles terrestres, nous devons inventer de nouvelles méthodes de mesure:
 \\[0.5cm]
-\begin{description} % j'aime pas le rendu. manque bulet points ?
+\begin{description}
     \item[La Parallaxe] calcule la distance d'un objet par trigonométrie en mesurant son angle d'observation.
     \item[Les chandelles standard] sont des objets dont une propriété particulière permet de déterminer sa luminosité réelle,
         et donc sa distance.
-    \item[L'effet Doppler] consiste à mesurer le décalage spectral d'un objet, qui est lié à la vitesse relative de l'objet par la loi de même nom. 
-        Cette méthode ne sera pas traitée ici. % c'est tout ?
+    \item[L'effet Doppler (ou redshift)] consiste à mesurer le décalage spectral d'un objet, qui est lié à sa vitesse relative par la loi de même nom. 
+        Cette méthode ne sera pas traitée ici.
 \end{description}
 \end{frame}
 
@@ -82,8 +82,7 @@
 \begin{frame}
     \frametitle{La Parallaxe}
     \framesubtitle{Principe}
-    % tikz shéma done
-    % formule lien mas->deg ? done
+
     \begin{figure}[htbp] % généré par ia
         \resizebox*{0.7\textwidth}{!}{
         \begin{tikzpicture}
@@ -132,9 +131,7 @@
 \begin{frame}
     \frametitle{La Parallaxe}
     \framesubtitle{Application}
-    % Logo Gaia en marge/coté, formule erreur, mention directe sources ? comment remplir ?
-    % ajouter bit apres code ! mention f (equation)
-    \begin{columns}%[T] % aligned with top
+    \begin{columns}
         \begin{column}{0.3\textwidth}
             \textbf{Source:}
             \\[8pt]
@@ -149,7 +146,7 @@
 
             On a un calcul de type $d=\frac{cte}\varpi$ avec $\sigma_d$ l'incertitude sur la distance et celle sur la mesure $\sigma_\varpi$ fournie:
             \[
-            d\, w=cte \Leftrightarrow \mathrm{d} (d\,w)=0 \Leftrightarrow d\,\mathrm{d} w=-w\,\mathrm{d} d
+            d\, \varpi=cte \Leftrightarrow \mathrm{d} (d\,\varpi)=0 \Leftrightarrow d\,\mathrm{d} \varpi=-\varpi\,\mathrm{d} d
             \]
             \begin{equation*}\label{eq.parallax-error}
                 \frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
@@ -168,7 +165,7 @@
 \end{frame}
 
 \subsection{Programme}
-\begin{frame}[fragile] % étonnament permet de compiler
+\begin{frame}[fragile] % étonnament, permet de compiler
     \frametitle{La Parallaxe}
     \framesubtitle{Programme}
 \begin{lstlisting}
@@ -198,17 +195,16 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \end{lstlisting}
 \end{frame}
 
-\section{Chandelles standard}% +cepheid ?
+\section{Chandelles standard}
 \subsection{Principe}
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Principe}
-    % image cepheid, leavitt ? formule leavitt
     \begin{figure}
         \resizebox*{0.75\textwidth}{!}{
         \includegraphics{cepheid.jpg}}% source esa/hubble
     \end{figure}
-    \begin{equation*}\label{eq.leavitt-law} % en bas
+    \begin{equation*}\label{eq.leavitt-law}
         M\propto \log_{10}(P)
     \end{equation*}
     \centering\itshape
@@ -219,7 +215,6 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Théorie}
-    % les 2 magnitudes, 
     \textbf{La magnitude,} unité de luminosité sans dimension:
     \begin{block}{La magnitude absolue}
         \begin{equation*}
@@ -235,23 +230,21 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
         Magnitude mesurée à une distance $d$, liée à $M$ par le \textbf{module de distance}.
     \end{block}
     Cependant, des poussières absorbent les rayonnements, c'est \textbf{l'extinction interstellaire}.
-    Pour pallier ce problème on utilise l'indice de Wesenheit. % on l'intègre pas de suite ?
+    Pour pallier ce problème on utilise l'indice de Wesenheit.
     \\[8pt]
-    \textit{On note que plus un astre est lumineux, plus $M$ est négatif.} % réécrire
+    \textit{On note que plus un astre est lumineux, plus $M$ est négatif.}
 \end{frame}
 
 \subsection{Calibration}
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Calibration}
-    % liste raisons calibration qqn d'autre
-    % equation ABL, mention Rippepi
     J'ai dû déléguer la calibration, utiliser celle de chercheurs car:
     \begin{itemize}
         \item Peu de céphéides sont suffisamment proches pour utiliser la parallaxe et fiables.
         \item Elles sont brillantes et de luminosité variable: on doit trouver un proxy.
         \item Les problèmes de la parallaxe s'appliquent toujours: on doit utiliser l'Astrometric Based Luminosity (ABL):
-         \begin{equation*}\label{eq.ABL} % delete, concerne plus ? si.
+         \begin{equation*}\label{eq.ABL}
             \text{ABL} = 10^{0.2 M} = \varpi 10^{0.2 m - 2}
          \end{equation*}
     \end{itemize}
@@ -263,7 +256,6 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Calibration}
-    % Lister 3 équations. coller tableau pr lire le bon param ?
     La fonction de Wesenheit adaptée aux capteurs de Gaia devient:
     \begin{equation*}\label{eq.Wesenheit}
         W(G,G_{BP},G_{RP})=m=G-1.90(G_{BP}-G_{RP})
@@ -275,7 +267,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
         W_A=M=-2.837-3.183\log_{10}(P)
     \end{equation*}
 
-    On mêle les 3 équations:%dfrac agrandit visuellement la fraction
+    On mêle les 3 équations: %dfrac agrandit visuellement la fraction
 
     \[
         \boxed{ 
@@ -286,7 +278,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \subsection{Programme}
 \begin{frame}[fragile,allowframebreaks]
     \frametitle{Chandelles standard: les Céphéides}
-    \framesubtitle{Programme}% 2nd program
+    \framesubtitle{Programme}
     \begin{lstlisting}
 from numpy import log10, log
 
@@ -353,7 +345,7 @@ NULL&NULL&15106&76\\
 NULL&NULL&67362&341\\
 NULL&NULL&8432&42\\
 3663&362&4851&24\\
-581&30&6421&3\\
+581&30&642&3\\
 NULL&NULL&15822&80\\
 NULL&NULL&10766&54\\
 NULL&NULL&93392&473\\
@@ -375,7 +367,6 @@ NULL&NULL&93392&473\\
     \end{tikzpicture}
 \end{frame}
 
-%\section{Références}
 \begin{frame}
     \frametitle{Remerciements}
 

@@ -6,11 +6,9 @@
 \usepackage{babel}        % Parle d'autres langues (espaces avec : ...). Ici fr passé a documentclass, sinon marche pas: Norme récente !
 \usepackage{textcomp}
 \usepackage{mathtools,amssymb}
-\usepackage{gensymb} % for \degree
 \usepackage{lmodern}
 \usepackage{graphbox}
 \usepackage[dvipsnames,svgnames]{xcolor}
-\usepackage{lipsum}       %lorem ipsum, texte bouche trous, a retirer
 
 \usepackage{lastpage} % spécifique, pr derniere page
 \usepackage[headsepline=0.4pt]{scrlayer-scrpage} % pr en-tete et pied-de page, optimisé scratcl (koma-type)
@@ -18,7 +16,7 @@
 \clearpairofpagestyles % clear défaut
 
 \rohead{\includegraphics[height=13.5pt]{utln.png}} % taille fonction de la place dispo. Pr augmenter ajouter \usepackage[headheight=25pt]{geometry}
-\lohead{\leftmark} % trouver l'affichage de la section en cours, left pr section, right pr subsection. OUI!!
+\lohead{\leftmark} % trouver l'affichage de la section en cours, left pr section, right pr subsection.
 
 \cfoot{\pagemark/\pageref{LastPage}} % Center foot (\pagemark est la commande KOMA pour le numéro de page)
 
@@ -62,21 +60,21 @@
 \titlehead{
     \centering
     \includegraphics[height=2cm]{utln.png}
-    \hspace{2cm} % Espace entre les deux logos
+    \hspace{2cm}
     \includegraphics[height=2cm]{im2np.jpg}
 }
 \title{Etude de différentes méthodes de mesure de distance stellaire}
 \author{Quentin Buet, Antoine Roueff}
-\date{23 juin 2026} % a specifier. c'est bon !
+\date{23 juin 2026}
 
-\begin{document} % max 15 pages
+\begin{document}
 \vfill % chaque \vfill a le meme espace. Evite de tout redéfinir avec l'enviro titlepage.
 \maketitle
 \vfill
 \begin{abstract}
     \begin{center}
         \textbf{Abstract}
-    \end{center} % est-ce nécessaire ?
+    \end{center}
 
     \textit{Contexte. }La mission du satellite Gaia a permis d'enrichir grandement notre carte du ciel, 
     et de compléter les méthodes de mesure de distance stellaire (distance ladder en anglais).
@@ -114,7 +112,7 @@ C'est pourquoi les chercheurs conçoivent de nouvelles méthodes de mesure, nomm
 Pour construire cette échelle, nous avons besoin de plusieurs méthodes complémentaires:
 
 \begin{description}
-    \item[La Parallaxe] est fondée sur l'angle d'observation de l'objet stellaire (terme générique) % mieux ? quand même une parenthèse
+    \item[La Parallaxe] est fondée sur l'angle d'observation de l'objet stellaire (terme générique)
         pour en déduire sa distance par trigonométrie. Cette méthode ne nécessite pas de calibration, mais n'est efficace que pour de courtes distances: 
         nous ne pouvons pas mesurer plus loin que la voie lactée.
         Sa version avancée permet généralement de calibrer d'autres méthodes.
@@ -132,7 +130,7 @@ Le principe de la parallaxe est simple: nous tournons autour du Soleil en une p�
 Selon un repère héliocentrique, et dans les périodes de mesure, l'objet est considéré fixe. % source ?
 Comme décrit \cref{fig.parallax}, on mesure l'angle $\varpi$ entre l'objet et la tangente à l'orbite, 
 et connaissant le rayon de cette orbite, on en détermine par trigonométrie la distance qui nous sépare de l'objet.
-Bien entendu, des complications arrivent bien vite: il a été prouvé que cette méthode a une sensibilité critique aux erreurs de mesure. % je voulais laisser simple, c'est vrai ici (c'est une inversion, 1/x)
+Bien entendu, des complications arrivent bien vite: il a été prouvé que cette méthode a une sensibilité critique aux erreurs de mesure.
 
 \begin{figure}[htbp]
     \centering % généré par ia
@@ -168,7 +166,7 @@ Bien entendu, des complications arrivent bien vite: il a été prouvé que cette
 \end{figure}
 
 L'unité de mesure de la parallaxe notée $\varpi$ est la miliseconde d'arc ($mas$), soit un millième d'une seconde d'arc, elle même 
-$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\times 10^{-6\,\circ}$. % \deg ou \degree ? tentons ^\circ, enleber package ?
+$\frac{1}{3600}^\circ$, soit $1 \,mas=3.6\times 10^{-6\,\circ}$.
 Cette unité, très petite, justifie à elle seule l'utilisation de l'approximation des angles petits, \cref{eq.parallax}. 
 On rappelle qu'un angle de un degré approximé ainsi est déjà négligeable.
 
@@ -182,7 +180,7 @@ On rappelle qu'un angle de un degré approximé ainsi est déjà négligeable.
 
 Aujourd'hui, la meilleure source de données pour la parallaxe provient du satellite Gaia. 
 Pour des raisons pratiques nous nous baserons sur la seconde publication de données \citep{DR2}, et sur l'échantillon 
-trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}. % a remplacer par les vraies data. x trouvable.
+trouvable \href{https://www.kaggle.com/datasets/solorzano/783k-gaia-dr2-stars}{sur le site kaggle}.
 
 Il est positionné sur le point de Lagrange L2 selon \citet{esa_scanning-law}, et parcourt donc une orbite de rayon 
 $r=1.01$ ua, une unité astronomique étant égale à la distance moyenne terre-soleil. Comme annoncé par \citet[Section~3.1]{DR2},
@@ -253,13 +251,13 @@ Si nous souhaitons explorer plus loin, vers d'autres galaxies, nous devons const
 
 Certains objets ont des propriétés physiques directement liées à leur luminosité absolue $M\,(mag)$, 
 que l'on peut ensuite comparer avec la luminosité apparente $m\,(mag)$ pour obtenir directement la distance $d\,(pc)$ 
-qui nous sépare de l'objet à l'aide de l'équation du module de distances \cref{eq.module_distance}.
+qui nous sépare de l'objet à l'aide de l'équation du module de distance noté $\mu$ \cref{eq.module_distance}.
 
 Il en existe de différents types mais nous étudierons seulement les céphéides.
 
 \subsection{Céphéides}
 Henrietta Leavitt a découvert que certaines étoiles qui pulsent appelées céphéides possèdent une relation de proportionnalité 
-entre leur période $P$ de pulsation et leur luminosité absolue $M$ \citep{Leavitt1908_cepheid-origin}. 
+entre leur période $P$ de pulsation en jours et leur luminosité absolue $M$ \citep{Leavitt1908_cepheid-origin}. 
 Ainsi, si l'on parvient à déterminer les coefficients de cette relation, nous pouvons déterminer la distance qui nous sépare de toute céphéide
 à l'aide de ce que l'on appelle la Loi de Leavitt:
 
@@ -272,15 +270,15 @@ Ainsi, si l'on parvient à déterminer les coefficients de cette relation, nous 
 La magnitude est une unité définie visuellement avant de l'être formellement. C'est pourquoi sa définition peut sembler particulière, 
 bien que ce soit l'unité de référence en astronomie, sans dimension \citep[Chapitre~4.1]{book_bases}. On en distingue 2:
 
-{\bfseries La magnitude absolue $M$} se mesure à une distance de $10\,pc$ de l'astre, de luminosité $L\,(W)$:
+{\bfseries La magnitude absolue $M$} se mesure à une distance de $10\,pc$ de l'astre, de luminosité $L\,(W)$, et de constante de calibration $k$:
 
 \begin{equation*}
-    M=-2.5\,\log_{10}(\frac{l}{4\pi(10\,pc)^2L_{Soleil}})+k
+    M=-2.5\,\log_{10}(\frac{L}{4\pi(10\,pc)^2L_{Soleil}})+k
 \end{equation*}
 
 On note que plus un astre est lumineux, plus $M$ est négatif.
 
-{\bfseries La magnitude apparente $m$} représente la magnitude mesurée à une distance donnée, liée à la magnitude absolue par:
+{\bfseries La magnitude apparente $m$} représente la magnitude mesurée à une distance donnée, liée à la magnitude absolue par le module de distance $\mu$:
 
 \begin{equation}\label{eq.module_distance}
     \mu = m-M = 5\log_{10}(d)-5 
@@ -313,7 +311,7 @@ Cependant, le satellite Gaia n'est pas conçu pour les distances les plus lointa
 pairer ces données avec d'autres téléscopes possédant les filtres proposés par \citet[Tableau~7]{cepheid-calibration}.
 Comme nous avons seulement pu récupérer des données venant de Gaia \citep{cepheid_source}, 
 nous choisissons d'utiliser la calibration de \citet[\'Equation~2]{Ripepi_datapaper}. 
-Ainsi, la fonction de Wesenheit devient:
+Ainsi, la fonction de Wesenheit devient, avec $G,G_{BP},G_{RP}$ les magnitudes de la bande de Gaia:
 
 \begin{equation}\label{eq.Wesenheit}
     W(G,G_{BP},G_{RP})=m=G-1.90(G_{BP}-G_{RP})
@@ -331,8 +329,8 @@ Ainsi,
     \end{cases*}
 \end{equation}
 
-coefficients que l'on pourra injecter dans \cref{eq.leavitt-law}, comme confirmé par \citet[\'Equation~7]{Ripepi_datapaper}, 
-avec $a=\beta$ et $b=\alpha$. Finalement,
+coefficients que l'on pourra injecter dans \cref{eq.leavitt-law}, comme confirmé par \citet[\'Equation~7]{Ripepi_datapaper}.
+Finalement,
 
 \begin{equation}\label{eq.leavitt-calibree}
     W_A=M=-2.837-3.183\log_{10}(P)
@@ -445,14 +443,15 @@ On remarque une grande différence entre la méthode de la parallaxe et celle de
 Comme mentionné plus tôt, inverser une mesure bruitée est très dangereux.
 C'est pourquoi les astrophysiciens utilisent aujourd'hui l'ABL pour calibrer d'autres méthodes.
 Aussi, on remarque l'avantage des Céphéides: bien que toute étoile n'est pas mesurable ainsi, 
-cela permet de mesurer bien plus loin, et plus fiablement (peux de céphéides purent avoir un calcul de parallaxe).
+cela permet de mesurer bien plus loin, et plus fiablement (peu de céphéides purent avoir un calcul de parallaxe).
 
 D'autant plus que, on le rappelle, la mesure de la parallaxe n'est pas fiable pour un objet à la luminosité variable.
 
 \section{Conclusion}
 Nous avons pu appliquer 2 des méthodes fondamentales de mesure de distance stellaire et remarqué que, dans ce domaine,
-peu de concessions peuvent être faites. Une de ses principales difficultés est l'impossibilité de réèlement vérifier nos résultats.
-De plus, la nature astronomique des données provoque quasi-systématiquement des marges d'erreur toutes aussi grandes.
+peu de concessions peuvent être faites. Une des principales difficultés est l'impossibilité de réelement vérifier nos résultats.
+De plus, la nature astronomique des données provoque quasi-systématiquement des marges d'erreur toutes aussi grandes. 
+La méthode des céphéides permet donc de les réduire.
 
 Ce domaine est vaste et nous n'avons pas pu étudier les autres éléments de l'échelle de distance stellaire
 comme les autres céphéides, ou encore l'effet Doppler. Nous avons pu cependant étudier les difficultés qui lui sont propres 
@@ -475,9 +474,8 @@ Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très ut
 
 Enfin, je tiens à remercier chaleureusement mon tuteur Antoine Roueff pour son aide précieuse.
 
-% biblio.
 
-\bibliographystyle{apalike} % meilleurs styles ?
+\bibliographystyle{apalike}
 \bibliography{CR_PPR}
 
 \end{document}
