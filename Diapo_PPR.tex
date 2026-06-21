@@ -1,5 +1,4 @@
 \documentclass[10pt,compress,hyperref={pdfpagemode=FullScreen,colorlinks=false}]{beamer}
-\usepackage{concrete}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{natbib}
@@ -56,6 +55,12 @@
 \end{frame}
 
 \begin{frame}{Plan}
+    \begin{tikzpicture}[remember picture, overlay]% formatage ai
+        \node[anchor=east,yshift=-0.35cm,xshift=3pt] at (current page.east) {
+            \includegraphics[height=0.943\textheight]{magelanic_cloud.jpeg}
+        };
+    \end{tikzpicture}
+
     \tableofcontents
 \end{frame}
 
@@ -73,6 +78,7 @@
 \end{frame}
 
 \section{Parallaxe}
+\subsection{Principe}
 \begin{frame}
     \frametitle{La Parallaxe}
     \framesubtitle{Principe}
@@ -128,7 +134,7 @@
     \framesubtitle{Application}
     % Logo Gaia en marge/coté, formule erreur, mention directe sources ? comment remplir ?
     % ajouter bit apres code ! mention f (equation)
-    \begin{columns}[T] % aligned with top
+    \begin{columns}%[T] % aligned with top
         \begin{column}{0.3\textwidth}
             \textbf{Source:}
             \\[8pt]
@@ -143,7 +149,7 @@
 
             On a un calcul de type $d=\frac{cte}\varpi$ avec $\sigma_d$ l'incertitude sur la distance et celle sur la mesure $\sigma_\varpi$ fournie:
             \[
-            d\, w=cte \Leftrightarrow \partial (d\,w)=0 \Leftrightarrow d\,\partial w=-w\,\partial d
+            d\, w=cte \Leftrightarrow \mathrm{d} (d\,w)=0 \Leftrightarrow d\,\mathrm{d} w=-w\,\mathrm{d} d
             \]
             \begin{equation*}\label{eq.parallax-error}
                 \frac{\sigma_\varpi}{\varpi}=\left|\frac{\sigma_d}{d}\right| \Longrightarrow
@@ -156,6 +162,7 @@
             \begin{equation*}
                 \varpi>0
             \end{equation*}
+            Note: On applique aussi la correction de $-0.029\,mas$ due aux mesures de Gaia.
         \end{column}
     \end{columns}
 \end{frame}
@@ -187,11 +194,12 @@ for _ in range(n):
 
 output.close()
 input.close()
-print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
+print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}")
 \end{lstlisting}
 \end{frame}
 
 \section{Chandelles standard}% +cepheid ?
+\subsection{Principe}
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Principe}
@@ -227,7 +235,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
         Magnitude mesurée à une distance $d$, liée à $M$ par le \textbf{module de distance}.
     \end{block}
     Cependant, des poussières absorbent les rayonnements, c'est \textbf{l'extinction interstellaire}.
-    Pour pallier on utilise l'indice de Wesenheit. % on l'intègre pas de suite ?
+    Pour pallier ce problème on utilise l'indice de Wesenheit. % on l'intègre pas de suite ?
     \\[8pt]
     \textit{On note que plus un astre est lumineux, plus $M$ est négatif.} % réécrire
 \end{frame}
@@ -235,7 +243,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
 \subsection{Calibration}
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
-    \framesubtitle{Calavons ibration}
+    \framesubtitle{Calibration}
     % liste raisons calibration qqn d'autre
     % equation ABL, mention Rippepi
     J'ai dû déléguer la calibration, utiliser celle de chercheurs car:
@@ -276,20 +284,95 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
 \end{frame}
 
 \subsection{Programme}
-\begin{frame}
+\begin{frame}[fragile,allowframebreaks]
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Programme}% 2nd program
+    \begin{lstlisting}
+from numpy import log10, log
+
+n=2000
+count=0
+for _ in range(52): # la 53e est les premieres donnees
+    input.readline()
+
+output.write("source_id\tdistance_parallax(pc)\t"
+    f"distance_error_parallax (pc)\tdistance_cepheid"
+    f"\tdistance_error_cepheid\n")
+
+for _ in range(n):
+    line=input.readline().replace(' ','').strip().split(';')
+    if line[16]=='DCEP_F':
+        count+=1 # ouverture
+        id=line[0]
+        period,G,Gbp,Grp,parallax,errparallax=line[6:12]
+
+        # Paralaxe
+        parallax=float(parallax)+0.046 # celle adaptee selon ripepi p.4
+        f=abs(float(errparallax)/parallax)
+        pardist=1/(parallax*1e-3) 
+        if f<0.2 and pardist>0:
+            parderr=str(pardist*f)
+            pardist=str(pardist)
+        else:
+            pardist='NULL'
+            parderr='NULL'
+
+        # Cepheide
+
+        M=-2.837-3.183*log10(float(period))
+        m=float(G)-1.9*(float(Gbp)-float(Grp))
+
+        cepdist=10**((m-M+5)/5)
+        ceperr=0.2*log(10)*cepdist*0.011
+        
+        output.write(f"{id}\t{pardist}\t{parderr}\t"
+        f"{cepdist}\t{ceperr}\n")
+
+input.close()
+output.close()
+print(count)
+\end{lstlisting}
 \end{frame}
 
 \begin{frame}
     \frametitle{Chandelles standard: les Céphéides}
     \framesubtitle{Résultat}
-    % résultat pr discuter des erreurs et puissance méthode
+\begin{center}
+\resizebox{0.7\textwidth}{!}{
+\begin{tabular}{llll}
+$d$ parallaxe&$\sigma_d$ parallaxe&$d$ cépheide&$\sigma_d$céphéide\\
+
+\hline
+
+NULL&NULL&18554&93\\
+NULL&NULL&96055&486\\
+184&595&4390&22\\
+NULL&NULL&12006&60\\
+NULL&NULL&15106&76\\
+6410&1109&19490&98\\
+NULL&NULL&67362&341\\
+NULL&NULL&8432&42\\
+3663&362&4851&24\\
+581&30&6421&3\\
+NULL&NULL&15822&80\\
+NULL&NULL&10766&54\\
+NULL&NULL&93392&473\\
+5882&899&15869&80\\
+1251&151&15241&77\\
+\hline
+\end{tabular}}
+\end{center}
+{\small Les résultats ainsi que l'ensemble des supports de recherche sont trouvables \url{https://github.com/Alpha13e/PPR}.}
 \end{frame}
 
 \section{Conclusion}
 \begin{frame}
     \frametitle{Conclusion}
+    \begin{tikzpicture}[remember picture, overlay]% formatage ai
+        \node[anchor=center,yshift=-10pt] at (current page.center) {
+            \includegraphics[width=\textwidth]{galaxy.jpg}
+        };
+    \end{tikzpicture}
 \end{frame}
 
 %\section{Références}
@@ -309,7 +392,7 @@ print(f"Done. {i} errors over {n}: Success rate {1-i/n:.2f}.")
     \\[8pt]
     Bien que nous n'ayons pas utilisé son contenu, \citet{main-source} fut très utile pour appréhender les différentes méthodes vues ici.
     \\[8pt]
-    Enfin, je tiens à remercier chalereusement mon tuteur Antoine Roueff pour son aide précieuse.
+    Enfin, je tiens à remercier chaleureusement mon tuteur Antoine Roueff pour son aide précieuse.
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Bibliographie}
